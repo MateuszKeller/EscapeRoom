@@ -3,6 +3,11 @@
 
 #include "PlayerCharacter.h"
 #include "Math/RotationMatrix.h"
+#include "Engine/World.h"
+#include "Interactable.h"
+#include "Item.h"
+
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -15,6 +20,10 @@ APlayerCharacter::APlayerCharacter()
 
 	ItemGrip = CreateDefaultSubobject<USceneComponent>(TEXT("ItemGrip"));
 	ItemGrip->SetupAttachment(RootComponent);
+
+	TraceDistance = 250.f;
+	LookAtActor = nullptr;
+	HoldItem = nullptr;
 
 
 }
@@ -30,6 +39,7 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	CheckLookAt();
 
 }
 
@@ -63,6 +73,55 @@ void APlayerCharacter::MoveRight(float Value)
 
 void APlayerCharacter::Interaction()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("E - Pressed. Action!"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("E - Pressed. Action!"));
+	if (IsValid(LookAtActor))
+	{
+		IInteractable* Interface = Cast<IInteractable>(LookAtActor);
+		Interface->Execute_InteractWith(LookAtActor, this);
+	}
 }
 
+AActor* APlayerCharacter::CheckLookAt()
+{
+	FVector CameraLocation;
+	FRotator CameraRotation;
+	FHitResult Hit;
+
+	GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
+	FVector End = CameraLocation + (CameraRotation.Vector() * TraceDistance);
+
+	FCollisionQueryParams Params;
+	GetWorld()->LineTraceSingleByChannel(Hit, CameraLocation, End, ECC_Camera, Params);
+	DrawDebugLine(GetWorld(), CameraLocation, End, FColor::Orange, false, 2.0f);
+	
+	AActor* HitActor = Hit.GetActor();
+	
+	if (IsValid(HitActor))
+	{
+		bool bInteractable = HitActor->GetClass()->ImplementsInterface(UInteractable::StaticClass());	
+		if (bInteractable)
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Outside"));
+			if (LookAtActor != HitActor)
+			{
+				LookAtActor = HitActor;
+				IInteractable* Interface = Cast<IInteractable>(LookAtActor);
+				Interface->Execute_OnLookAt(LookAtActor, this);
+
+			}
+		}
+		
+	}
+	else
+	{
+		LookAtActor = nullptr;
+	}
+	
+	return LookAtActor;
+}
+
+void APlayerCharacter::Cancel()
+{
+	
+
+}

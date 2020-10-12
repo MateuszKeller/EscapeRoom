@@ -8,6 +8,8 @@
 #include "Components/SceneComponent.h"
 #include "PlayerCharacter.generated.h"
 
+class AItem;
+
 UCLASS()
 class ESCAPE_ROOM_API APlayerCharacter : public ACharacter
 {
@@ -23,9 +25,8 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* PlayerCamera;
-
-	UPROPERTY(EditAnywhere)
-	USceneComponent* ItemGrip;
+	
+	AActor* LookAtActor;
 
 public:	
 	// Called every frame
@@ -45,5 +46,22 @@ public:
 	//Interacting with actor
 	UFUNCTION()
 	void Interaction();
+
+	//Checking at what player is looking
+	UFUNCTION()
+	AActor* CheckLookAt();
+
+	//
+	void Cancel();
+
+	AItem* HoldItem;
+
+	UPROPERTY(EditAnywhere)
+	USceneComponent* ItemGrip;
+
+	UPROPERTY(EditAnywhere)
+	float TraceDistance;
+
+
 
 };
