@@ -6,9 +6,18 @@
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SceneComponent.h"
+#include "Others.h"
 #include "PlayerCharacter.generated.h"
 
 class AItem;
+
+//UENUM(BlueprintType)
+//enum class EPlayerState : uint8 {
+//	None,
+//	Inspecting,
+//	Puzzle
+//};
+
 
 UCLASS()
 class ESCAPE_ROOM_API APlayerCharacter : public ACharacter
@@ -48,12 +57,13 @@ public:
 	void Interaction();
 
 	//Checking at what player is looking
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	AActor* CheckLookAt();
 
 	//
 	void Cancel();
 
+	UPROPERTY(BlueprintReadWrite)
 	AItem* HoldItem;
 
 	UPROPERTY(EditAnywhere)
@@ -61,6 +71,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float TraceDistance;
+
+	UPROPERTY(BlueprintReadWrite)
+	EPlayerCharacterState State = EPlayerCharacterState::None;
 
 
 

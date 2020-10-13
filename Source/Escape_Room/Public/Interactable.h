@@ -28,5 +28,8 @@ public:
 	void OnLookAt(APlayerCharacter* Player);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	void StopLookAt(APlayerCharacter* Player);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
 	void InteractWith(APlayerCharacter* Player);
 };

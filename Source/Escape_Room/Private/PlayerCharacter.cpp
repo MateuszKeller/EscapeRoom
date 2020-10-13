@@ -39,7 +39,8 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	CheckLookAt();
+	//CheckLookAt();
+
 
 }
 
@@ -55,6 +56,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interaction);
+	PlayerInputComponent->BindAction("Cancel", IE_Pressed, this, &APlayerCharacter::Cancel);
 
 }
 
@@ -74,10 +76,15 @@ void APlayerCharacter::MoveRight(float Value)
 void APlayerCharacter::Interaction()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("E - Pressed. Action!"));
+	IInteractable* Interface = Cast<IInteractable>(LookAtActor);
 	if (IsValid(LookAtActor))
 	{
-		IInteractable* Interface = Cast<IInteractable>(LookAtActor);
+		
 		Interface->Execute_InteractWith(LookAtActor, this);
+	}
+	else if(IsValid(HoldItem))
+	{
+		Interface->Execute_InteractWith(HoldItem, this);
 	}
 }
 
@@ -92,36 +99,35 @@ AActor* APlayerCharacter::CheckLookAt()
 
 	FCollisionQueryParams Params;
 	GetWorld()->LineTraceSingleByChannel(Hit, CameraLocation, End, ECC_Camera, Params);
-	DrawDebugLine(GetWorld(), CameraLocation, End, FColor::Orange, false, 2.0f);
+	//DrawDebugLine(GetWorld(), CameraLocation, End, FColor::Orange, false, 2.0f);
 	
 	AActor* HitActor = Hit.GetActor();
-	
+	IInteractable* Interface = Cast<IInteractable>(LookAtActor);
 	if (IsValid(HitActor))
 	{
 		bool bInteractable = HitActor->GetClass()->ImplementsInterface(UInteractable::StaticClass());	
 		if (bInteractable)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Outside"));
 			if (LookAtActor != HitActor)
 			{
 				LookAtActor = HitActor;
-				IInteractable* Interface = Cast<IInteractable>(LookAtActor);
 				Interface->Execute_OnLookAt(LookAtActor, this);
-
 			}
 		}
-		
 	}
 	else
 	{
 		LookAtActor = nullptr;
 	}
-	
+
 	return LookAtActor;
 }
 
 void APlayerCharacter::Cancel()
 {
-	
-
+	if (IsValid(HoldItem))
+	{
+		HoldItem->Drop();
+	}
+	HoldItem = nullptr;
 }
