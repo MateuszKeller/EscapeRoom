@@ -53,9 +53,9 @@ public:
 	virtual void OnLookAt_Implementation(APlayerCharacter* Player);
 
 	//
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-	void StopLookAt(APlayerCharacter* Player);
-	virtual void StopLookAt_Implementation(APlayerCharacter* Player);
+	//UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	//void StopLookAt(APlayerCharacter* Player);
+	//virtual void StopLookAt_Implementation(APlayerCharacter* Player);
 
 	//
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")

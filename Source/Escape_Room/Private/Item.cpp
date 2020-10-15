@@ -37,7 +37,7 @@ void AItem::Tick(float DeltaTime)
 
 void AItem::OnLookAt_Implementation(APlayerCharacter * Player){ }
 
-void AItem::StopLookAt_Implementation(APlayerCharacter* Player){ }
+//void AItem::StopLookAt_Implementation(APlayerCharacter* Player){ }
 
 void AItem::InteractWith_Implementation(APlayerCharacter * Player)
 {

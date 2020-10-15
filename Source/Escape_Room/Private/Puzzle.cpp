@@ -2,6 +2,8 @@
 
 
 #include "Puzzle.h"
+#include "Kismet/GameplayStatics.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
 
 // Sets default values
 APuzzle::APuzzle()
@@ -15,19 +17,22 @@ APuzzle::APuzzle()
 	PuzzleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Puzzle Mesh"));
 	PuzzleMesh->SetupAttachment(RootComponent);
 
+	CameraRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Camera Root"));
+	CameraRoot->SetupAttachment(RootComponent);
+
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
-	SpringArm->SetupAttachment(PuzzleMesh);
+	SpringArm->SetupAttachment(CameraRoot);
 
 	PuzzleCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	PuzzleCamera->SetupAttachment(SpringArm);
-	
-
 }
 
 // Called when the game starts or when spawned
 void APuzzle::BeginPlay()
 {
 	Super::BeginPlay();
+
+
 	
 }
 
@@ -38,3 +43,26 @@ void APuzzle::Tick(float DeltaTime)
 
 }
 
+void APuzzle::OnLookAt_Implementation(APlayerCharacter* Player) { }
+
+void APuzzle::InteractWith_Implementation(APlayerCharacter* Player){ }
+
+void APuzzle::ChangeView(AActor* From, AActor* To)
+{
+	auto Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	Controller->SetViewTargetWithBlend(To, 0.5f);
+	From->DisableInput(Controller);
+	To->EnableInput(Controller);
+	if (this == To)
+	{
+		Controller->bShowMouseCursor = true;
+		auto InputMode = FInputModeGameAndUI();
+		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockInFullscreen);
+		Controller->SetInputMode(InputMode);
+	}
+	else
+	{
+		Controller->bShowMouseCursor = false;
+		Controller->SetInputMode(FInputModeGameOnly());
+	}
+}

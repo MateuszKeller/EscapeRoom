@@ -8,12 +8,13 @@
 #include "Camera/CameraComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Interactable.h"
 #include "Puzzle.generated.h"
 
 
 
 UCLASS()
-class ESCAPE_ROOM_API APuzzle : public AActor
+class ESCAPE_ROOM_API APuzzle : public AActor, public IInteractable
 {
 	GENERATED_BODY()
 	
@@ -24,6 +25,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USceneComponent* CameraRoot;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USpringArmComponent* SpringArm;
@@ -40,5 +44,20 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	///Interactable:
+	//
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+		void OnLookAt(APlayerCharacter* Player);
+	virtual void OnLookAt_Implementation(APlayerCharacter* Player);
+
+	//
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+		void InteractWith(APlayerCharacter* Player);
+	virtual void InteractWith_Implementation(APlayerCharacter* Player);
+
+	//
+	UFUNCTION(BlueprintCallable)
+	void ChangeView(AActor* From, AActor* To);
 
 };

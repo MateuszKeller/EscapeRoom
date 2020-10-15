@@ -19,7 +19,7 @@ APlayerCharacter::APlayerCharacter()
 	PlayerCamera->SetupAttachment(RootComponent);
 
 	ItemGrip = CreateDefaultSubobject<USceneComponent>(TEXT("ItemGrip"));
-	ItemGrip->SetupAttachment(RootComponent);
+	ItemGrip->SetupAttachment(PlayerCamera);
 
 	TraceDistance = 250.f;
 	LookAtActor = nullptr;
