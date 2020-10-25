@@ -24,12 +24,11 @@ class ESCAPE_ROOM_API IInteractable
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
+	//Event function when player looks on something 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
 	void OnLookAt(APlayerCharacter* Player);
 
-	//UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-	//void StopLookAt(APlayerCharacter* Player);
-
+	//Event function when player tries to interact with something
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
 	void InteractWith(APlayerCharacter* Player);
 };

@@ -21,11 +21,6 @@ APlayerCharacter::APlayerCharacter()
 	ItemGrip = CreateDefaultSubobject<USceneComponent>(TEXT("ItemGrip"));
 	ItemGrip->SetupAttachment(PlayerCamera);
 
-	TraceDistance = 250.f;
-	LookAtActor = nullptr;
-	HoldItem = nullptr;
-
-
 }
 
 // Called when the game starts or when spawned
@@ -39,8 +34,6 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//CheckLookAt();
-
 
 }
 
@@ -79,7 +72,6 @@ void APlayerCharacter::Interaction()
 	IInteractable* Interface = Cast<IInteractable>(LookAtActor);
 	if (IsValid(LookAtActor))
 	{
-		
 		Interface->Execute_InteractWith(LookAtActor, this);
 	}
 	else if(IsValid(HoldItem))
@@ -129,5 +121,4 @@ void APlayerCharacter::Cancel()
 	{
 		HoldItem->Drop();
 	}
-	HoldItem = nullptr;
 }

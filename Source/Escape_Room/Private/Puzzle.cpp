@@ -3,7 +3,6 @@
 
 #include "Puzzle.h"
 #include "Kismet/GameplayStatics.h"
-#include "Blueprint/WidgetBlueprintLibrary.h"
 
 // Sets default values
 APuzzle::APuzzle()
@@ -32,8 +31,6 @@ void APuzzle::BeginPlay()
 {
 	Super::BeginPlay();
 
-
-	
 }
 
 // Called every frame
@@ -43,26 +40,36 @@ void APuzzle::Tick(float DeltaTime)
 
 }
 
-void APuzzle::OnLookAt_Implementation(APlayerCharacter* Player) { }
-
-void APuzzle::InteractWith_Implementation(APlayerCharacter* Player){ }
-
-void APuzzle::ChangeView(AActor* From, AActor* To)
+void APuzzle::ChangeView()
 {
 	auto Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	Controller->SetViewTargetWithBlend(To, 0.5f);
-	From->DisableInput(Controller);
-	To->EnableInput(Controller);
-	if (this == To)
+	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	AActor* From;
+	AActor* To;
+
+	if (Player->State == EPlayerCharacterState::None)
 	{
+		From = Cast<AActor>(Player);
+		To = Cast<AActor>(this);
+
 		Controller->bShowMouseCursor = true;
-		auto InputMode = FInputModeGameAndUI();
+		FInputModeGameAndUI InputMode = FInputModeGameAndUI();
 		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockInFullscreen);
 		Controller->SetInputMode(InputMode);
+		Player->State = EPlayerCharacterState::Puzzle;
 	}
 	else
 	{
+		From = Cast<AActor>(this);
+		To = Cast<AActor>(Player);
+
 		Controller->bShowMouseCursor = false;
 		Controller->SetInputMode(FInputModeGameOnly());
+		Player->State = EPlayerCharacterState::None;
 	}
+
+	Controller->SetViewTargetWithBlend(To, 0.5f);
+	From->DisableInput(Controller);
+	To->EnableInput(Controller);
 }

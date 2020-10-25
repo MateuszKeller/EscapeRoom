@@ -11,14 +11,6 @@
 
 class AItem;
 
-//UENUM(BlueprintType)
-//enum class EPlayerState : uint8 {
-//	None,
-//	Inspecting,
-//	Puzzle
-//};
-
-
 UCLASS()
 class ESCAPE_ROOM_API APlayerCharacter : public ACharacter
 {
@@ -28,6 +20,15 @@ public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
 
+	UPROPERTY(BlueprintReadWrite)
+	AItem* HoldItem = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	USceneComponent* ItemGrip;
+
+	UPROPERTY(BlueprintReadWrite)
+	EPlayerCharacterState State = EPlayerCharacterState::None;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -35,9 +36,12 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* PlayerCamera;
 	
-	AActor* LookAtActor;
+	AActor* LookAtActor = nullptr;
 
-public:	
+	UPROPERTY(EditAnywhere)
+	float TraceDistance = 250.f;
+
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -60,20 +64,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	AActor* CheckLookAt();
 
-	//
 	void Cancel();
 
-	UPROPERTY(BlueprintReadWrite)
-	AItem* HoldItem;
+private:	
 
-	UPROPERTY(EditAnywhere)
-	USceneComponent* ItemGrip;
 
-	UPROPERTY(EditAnywhere)
-	float TraceDistance;
 
-	UPROPERTY(BlueprintReadWrite)
-	EPlayerCharacterState State = EPlayerCharacterState::None;
 
 
 

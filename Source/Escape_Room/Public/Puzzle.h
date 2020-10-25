@@ -22,6 +22,15 @@ public:
 	// Sets default values for this actor's properties
 	APuzzle();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	///IInteractable:
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Interaction")
+	void OnLookAt(APlayerCharacter* Player);
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Interaction")
+	void InteractWith(APlayerCharacter* Player);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -41,23 +50,10 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* PuzzleMesh;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	///Interactable:
-	//
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-		void OnLookAt(APlayerCharacter* Player);
-	virtual void OnLookAt_Implementation(APlayerCharacter* Player);
-
-	//
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-		void InteractWith(APlayerCharacter* Player);
-	virtual void InteractWith_Implementation(APlayerCharacter* Player);
-
-	//
+	// Changes view from player to puzzle and vice versa
 	UFUNCTION(BlueprintCallable)
-	void ChangeView(AActor* From, AActor* To);
+		void ChangeView();
+private:	
+
 
 };

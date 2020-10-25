@@ -5,14 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Interactable.h"
-#include "Components/StaticMeshComponent.h"
-#include "Components/SphereComponent.h"
 #include "Item.generated.h"
-
-// TODO zmiana PickUp() na ~ToEquipment()
-// TODO dodaæ 2 BP ~EquipableItem i ~InspectionableItem	
-// TODO zmieniæ InteractWith na BP
-	// EqItem bd mia³ na nim PickUp(), InsItem - Inspection()
 
 UCLASS()
 class ESCAPE_ROOM_API AItem : public AActor, public IInteractable
@@ -23,55 +16,45 @@ public:
 	// Sets default values for this actor's properties
 	AItem();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	///IInteractable:
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Interaction")
+	void OnLookAt(APlayerCharacter* Player);
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Interaction")
+	void InteractWith(APlayerCharacter* Player);
+
+	UFUNCTION(BlueprintCallable)
+	void Drop();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere)
-	USphereComponent* InteractCollision;
+	UPROPERTY(EditDefaultsOnly, Category = "Item")
+	class USphereComponent* ItemInteractCollision;
 
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* ItemMesh;
+	UPROPERTY(EditDefaultsOnly, Category = "Item")
+	class UStaticMeshComponent* ItemMesh;
 
-	UPROPERTY(EditAnywhere)
-	FTransform WorldPosition;
+	UPROPERTY(EditDefaultsOnly, Category = "Item")
+	FTransform ItemWorldPosition;
 
-	UPROPERTY(EditAnywhere)
-	FString Name;
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Item")
+	FString ItemName = "Default Item";
 
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Item")
+	class UTexture2D* ItemThumbnail;
+
+	//During inspection does actor is rotating
 	UPROPERTY(BlueprintReadWrite)
 	bool isRotating;
 
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	//
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-	void OnLookAt(APlayerCharacter* Player);
-	virtual void OnLookAt_Implementation(APlayerCharacter* Player);
-
-	//
-	//UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-	//void StopLookAt(APlayerCharacter* Player);
-	//virtual void StopLookAt_Implementation(APlayerCharacter* Player);
-
-	//
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-	void InteractWith(APlayerCharacter* Player);
-	virtual void InteractWith_Implementation(APlayerCharacter* Player);
-
-	//
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void PickUp(APlayerCharacter* Player);
 
-	//
-	UFUNCTION()
-	void Inspect(APlayerCharacter* Player);
-
-	//
 	UFUNCTION(BlueprintCallable)
-	void Drop();
+	void Inspect(APlayerCharacter* Player);
 
 };
