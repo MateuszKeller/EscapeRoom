@@ -2,6 +2,7 @@
 
 
 #include "Puzzle.h"
+#include "PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -66,6 +67,7 @@ void APuzzle::ChangeView()
 
 		Controller->bShowMouseCursor = false;
 		Controller->SetInputMode(FInputModeGameOnly());
+		Controller->SetIgnoreLookInput(false);
 		Player->State = EPlayerCharacterState::None;
 	}
 

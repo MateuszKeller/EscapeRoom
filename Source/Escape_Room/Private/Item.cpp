@@ -2,10 +2,13 @@
 
 
 #include "Item.h"
+#include "PlayerCharacter.h"
 #include "Components/PrimitiveComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
+
+
 
 // Sets default values
 AItem::AItem()
@@ -18,10 +21,8 @@ AItem::AItem()
 	ItemInteractCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Interaction Sphere"));
 	ItemInteractCollision->SetupAttachment(RootComponent);
 
-	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Item Mesh"));
-	ItemMesh->SetupAttachment(RootComponent);
-
-	
+	ItemMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Item Mesh"));
+	ItemMeshComponent->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +31,10 @@ void AItem::BeginPlay()
 	Super::BeginPlay();	
 
 	ItemWorldPosition = this->GetActorTransform();
+
+	ItemDetails.ItemClass = this->GetClass();
+	ItemDetails.ItemMesh = ItemMeshComponent->GetStaticMesh();
+
 }
 
 // Called every frame
@@ -42,6 +47,9 @@ void AItem::Tick(float DeltaTime)
 void AItem::PickUp(APlayerCharacter* Player)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Can't touch me!"));
+
+	Player->PlayerInventory->AddItem(ItemDetails);
+	/*
 	ItemMesh->SetSimulatePhysics(false);
 	this->SetActorEnableCollision(false);
 
@@ -49,12 +57,14 @@ void AItem::PickUp(APlayerCharacter* Player)
 	AttachToComponent(Player->ItemGrip, rules);
 	//InteractCollision->SetSimulatePhysics(false);
 
-	Player->HoldItem = this;
+	Player->HoldItem = this;*/
+
+	this->Destroy();
 }
 
 void AItem::Inspect(APlayerCharacter* Player)
 {
-	ItemMesh->SetSimulatePhysics(false);
+	ItemMeshComponent->SetSimulatePhysics(false);
 	this->SetActorEnableCollision(false);
 
 	FAttachmentTransformRules rules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepRelative, true);
@@ -76,7 +86,7 @@ void AItem::Inspect(APlayerCharacter* Player)
 
 }
 
-void AItem::Drop()
+void AItem::DropItem()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Hehe I'm free!"));
 	

@@ -11,7 +11,7 @@
 #include "Interactable.h"
 #include "Puzzle.generated.h"
 
-
+class APlayerCharacter;
 
 UCLASS()
 class ESCAPE_ROOM_API APuzzle : public AActor, public IInteractable
@@ -22,9 +22,6 @@ public:
 	// Sets default values for this actor's properties
 	APuzzle();
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	///IInteractable:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Interaction")
 	void OnLookAt(APlayerCharacter* Player);
@@ -34,6 +31,14 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Changes view from player to puzzle and vice versa
+	UFUNCTION(BlueprintCallable)
+		void ChangeView();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USceneComponent* CameraRoot;
@@ -49,11 +54,5 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* PuzzleMesh;
-
-	// Changes view from player to puzzle and vice versa
-	UFUNCTION(BlueprintCallable)
-		void ChangeView();
-private:	
-
 
 };

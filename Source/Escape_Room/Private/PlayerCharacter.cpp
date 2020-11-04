@@ -4,6 +4,7 @@
 #include "PlayerCharacter.h"
 #include "Math/RotationMatrix.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
 #include "Interactable.h"
 #include "Item.h"
 
@@ -21,6 +22,7 @@ APlayerCharacter::APlayerCharacter()
 	ItemGrip = CreateDefaultSubobject<USceneComponent>(TEXT("ItemGrip"));
 	ItemGrip->SetupAttachment(PlayerCamera);
 
+	PlayerInventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("PlayerInventory"));
 }
 
 // Called when the game starts or when spawned
@@ -49,7 +51,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interaction);
-	PlayerInputComponent->BindAction("Cancel", IE_Pressed, this, &APlayerCharacter::Cancel);
+	PlayerInputComponent->BindAction("Cancel", IE_Pressed, this, &APlayerCharacter::CancelInspection);
+	PlayerInputComponent->BindAction("Cursor", IE_Pressed, this, &APlayerCharacter::ShowCursor);
+
 
 }
 
@@ -77,6 +81,28 @@ void APlayerCharacter::Interaction()
 	else if(IsValid(HoldItem))
 	{
 		Interface->Execute_InteractWith(HoldItem, this);
+	}
+}
+
+void APlayerCharacter::ShowCursor()
+{
+	APlayerController* Controll = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (!Controll->bShowMouseCursor)
+	{
+		Controll->bShowMouseCursor = true;
+		Controll->SetIgnoreLookInput(true);
+			//Controll->SetIgnoreMoveInput(true);
+		//FInputModeUIOnly InputMode = FInputModeUIOnly();
+		//InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockInFullscreen);
+		//Controll->SetInputMode(InputMode);
+	}
+	else
+	{
+		Controll->bShowMouseCursor = false;
+		Controll->SetIgnoreLookInput(false);
+			//Controll->SetIgnoreMoveInput(false);
+		//FInputModeGameOnly InputMode = FInputModeGameOnly();
+		//Controll->SetInputMode(InputMode);
 	}
 }
 
@@ -115,10 +141,18 @@ AActor* APlayerCharacter::CheckLookAt()
 	return LookAtActor;
 }
 
-void APlayerCharacter::Cancel()
+void APlayerCharacter::CancelInspection()
 {
 	if (IsValid(HoldItem))
 	{
-		HoldItem->Drop();
+		HoldItem->DropItem();
+	}
+}
+
+void APlayerCharacter::UseItem(AItem* Item)
+{
+	if (Item)
+	{
+		Item->DropItem();
 	}
 }

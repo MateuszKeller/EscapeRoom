@@ -6,10 +6,10 @@
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SceneComponent.h"
+#include "InventoryComponent.h"
 #include "Others.h"
 #include "PlayerCharacter.generated.h"
 
-class AItem;
 
 UCLASS()
 class ESCAPE_ROOM_API APlayerCharacter : public ACharacter
@@ -20,27 +20,9 @@ public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
 
-	UPROPERTY(BlueprintReadWrite)
-	AItem* HoldItem = nullptr;
-
-	UPROPERTY(EditAnywhere)
-	USceneComponent* ItemGrip;
-
-	UPROPERTY(BlueprintReadWrite)
-	EPlayerCharacterState State = EPlayerCharacterState::None;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere)
-	UCameraComponent* PlayerCamera;
-	
-	AActor* LookAtActor = nullptr;
-
-	UPROPERTY(EditAnywhere)
-	float TraceDistance = 250.f;
-
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -60,17 +42,39 @@ protected:
 	UFUNCTION()
 	void Interaction();
 
+	//
+	UFUNCTION()
+	void ShowCursor();
+
 	//Checking at what player is looking
 	UFUNCTION(BlueprintCallable)
 	AActor* CheckLookAt();
 
-	void Cancel();
+	void CancelInspection();
 
-private:	
+public:
 
+	//TODO change/delete
+	UFUNCTION(BlueprintCallable)
+	void UseItem(class AItem* Item);
 
+	UPROPERTY(EditAnywhere)
+	UCameraComponent* PlayerCamera;
 
+	UPROPERTY(BlueprintReadWrite)
+	EPlayerCharacterState State = EPlayerCharacterState::None;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UInventoryComponent* PlayerInventory;
 
+	AActor* LookAtActor = nullptr;
 
+	UPROPERTY(BlueprintReadWrite)
+	AItem* HoldItem = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	USceneComponent* ItemGrip;
+	
+	UPROPERTY(EditAnywhere)
+	float TraceDistance = 250.f;
 };

@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "PlayerCharacter.h"
+//#include "PlayerCharacter.h"
 #include "Interactable.generated.h"
+
+class APlayerCharacter;
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
