@@ -32,7 +32,7 @@ public:
 	UFUNCTION()
 	bool AddItem(FItemDetailStruct ItemStruct);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	bool RemoveItem(FItemDetailStruct ItemStruct);
 
 	UPROPERTY(BlueprintAssignable)

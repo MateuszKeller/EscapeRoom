@@ -1,13 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Item.h"
 #include "PlayerCharacter.h"
 #include "Components/PrimitiveComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
-
 
 
 // Sets default values
@@ -46,9 +44,11 @@ void AItem::Tick(float DeltaTime)
 
 void AItem::PickUp(APlayerCharacter* Player)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Can't touch me!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Can't touch me!"));
 
-	Player->PlayerInventory->AddItem(ItemDetails);
+	if(Player->PlayerInventory->AddItem(ItemDetails))
+		this->Destroy();
+
 	/*
 	ItemMesh->SetSimulatePhysics(false);
 	this->SetActorEnableCollision(false);
@@ -59,7 +59,7 @@ void AItem::PickUp(APlayerCharacter* Player)
 
 	Player->HoldItem = this;*/
 
-	this->Destroy();
+	
 }
 
 void AItem::Inspect(APlayerCharacter* Player)
@@ -71,7 +71,7 @@ void AItem::Inspect(APlayerCharacter* Player)
 	AttachToComponent(Player->ItemGrip, rules);
 	//InteractCollision->SetSimulatePhysics(false);
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Inspection?!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Inspection?!"));
 
 	APlayerController* Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	Controller->bShowMouseCursor = true;
@@ -88,7 +88,7 @@ void AItem::Inspect(APlayerCharacter* Player)
 
 void AItem::DropItem()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Hehe I'm free!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Hehe I'm free!"));
 	
 	FDetachmentTransformRules rules = FDetachmentTransformRules(EDetachmentRule::KeepWorld, true);
 	DetachFromActor(rules);

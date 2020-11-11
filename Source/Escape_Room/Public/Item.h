@@ -15,17 +15,22 @@ struct FItemDetailStruct
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Item")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
 	FString ItemName = "Default Item";
 
 	UPROPERTY(BlueprintReadOnly, Category = "Item")
 	UStaticMesh* ItemMesh = nullptr;
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Item")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
 	UTexture2D* ItemThumbnail = nullptr;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
 	TSubclassOf<AItem> ItemClass = nullptr;
+
+	bool operator==(const FItemDetailStruct& other) const {
+		return ItemName == other.ItemName && ItemClass == other.ItemClass;
+	}
+
 };
 
 UCLASS()

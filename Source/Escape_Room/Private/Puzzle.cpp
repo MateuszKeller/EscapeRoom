@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Puzzle.h"
 #include "PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
@@ -57,8 +56,12 @@ void APuzzle::ChangeView()
 		Controller->bShowMouseCursor = true;
 		FInputModeGameAndUI InputMode = FInputModeGameAndUI();
 		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockInFullscreen);
+		//InputMode.SetHideCursorDuringCapture(false);
 		Controller->SetInputMode(InputMode);
 		Player->State = EPlayerCharacterState::Puzzle;
+
+		const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+		Controller->SetMouseLocation(ViewportSize.X / 2, ViewportSize.Y / 2);
 	}
 	else
 	{

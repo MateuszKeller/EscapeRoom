@@ -92,17 +92,21 @@ void APlayerCharacter::ShowCursor()
 		Controll->bShowMouseCursor = true;
 		Controll->SetIgnoreLookInput(true);
 			//Controll->SetIgnoreMoveInput(true);
-		//FInputModeUIOnly InputMode = FInputModeUIOnly();
-		//InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockInFullscreen);
-		//Controll->SetInputMode(InputMode);
+		FInputModeGameAndUI InputMode = FInputModeGameAndUI();
+		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockInFullscreen);
+		InputMode.SetHideCursorDuringCapture(false);
+		Controll->SetInputMode(InputMode);
+
+		const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+		Controll->SetMouseLocation(ViewportSize.X / 2, ViewportSize.Y / 2);
 	}
 	else
 	{
 		Controll->bShowMouseCursor = false;
 		Controll->SetIgnoreLookInput(false);
 			//Controll->SetIgnoreMoveInput(false);
-		//FInputModeGameOnly InputMode = FInputModeGameOnly();
-		//Controll->SetInputMode(InputMode);
+		FInputModeGameOnly InputMode = FInputModeGameOnly();
+		Controll->SetInputMode(InputMode);
 	}
 }
 

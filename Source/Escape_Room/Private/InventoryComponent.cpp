@@ -28,26 +28,27 @@ void UInventoryComponent::BeginPlay()
 
 bool UInventoryComponent::AddItem(FItemDetailStruct ItemStruct)
 {
-	FItemDetailStruct empty;
-	//Item->OwnerInventory = this;
-	Items.FindByPredicate([](FItemDetailStruct n) { return (n.ItemMesh == nullptr) ? true : false; })[0] = ItemStruct;
-		
-		//Items[Items.Find(empty.ItemMesh==nullptr)] = ItemStruct;
-		
-		//Items.Add(Item);
-
+	if (Items.FindByPredicate([](FItemDetailStruct n) { return (n.ItemMesh == nullptr) ? true : false; }))
+	{
+		Items.FindByPredicate([](FItemDetailStruct n) { return (n.ItemMesh == nullptr) ? true : false; })[0] = ItemStruct;
 		OnInventoryUpdated.Broadcast();
+		return true;
+	}
 	
-	return true;
+	//TODO make pop-up "You have no inventory space left!"
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("You dont have any inventory space left!"));
+	return false;
 }
 
 bool UInventoryComponent::RemoveItem(FItemDetailStruct ItemStruct)
 {
+	Items[Items.Find(ItemStruct)] = FItemDetailStruct();
+	OnInventoryUpdated.Broadcast();
 	/*if (Item)
 	{
 		//Item->OwnerInventory = nullptr;
 		Items.Remove(Item);
-		OnInventoryUpdated.Broadcast();
+		
 		//Item->Destroy();
 	}*/
 
