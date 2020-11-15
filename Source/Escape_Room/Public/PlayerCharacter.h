@@ -52,11 +52,14 @@ protected:
 
 	void CancelInspection();
 
+	UFUNCTION(BlueprintCallable)
+	void TryToUse();
+
 public:
 
 	//TODO change/delete
-	UFUNCTION(BlueprintCallable)
-	void UseItem(class AItem* Item);
+	//UFUNCTION(BlueprintCallable)
+	//void UseItem(class AItem* Item);
 
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* PlayerCamera;
@@ -65,7 +68,7 @@ public:
 	EPlayerCharacterState State = EPlayerCharacterState::None;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UInventoryComponent* PlayerInventory;
+	UInventoryComponent* PlayerInventory;
 
 	AActor* LookAtActor = nullptr;
 

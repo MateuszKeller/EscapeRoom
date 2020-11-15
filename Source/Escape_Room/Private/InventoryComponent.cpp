@@ -44,6 +44,8 @@ bool UInventoryComponent::RemoveItem(FItemDetailStruct ItemStruct)
 {
 	Items[Items.Find(ItemStruct)] = FItemDetailStruct();
 	OnInventoryUpdated.Broadcast();
+
+	CurrentlyUsedItem = FItemDetailStruct();
 	/*if (Item)
 	{
 		//Item->OwnerInventory = nullptr;

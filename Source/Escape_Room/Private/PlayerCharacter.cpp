@@ -53,6 +53,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interaction);
 	PlayerInputComponent->BindAction("Cancel", IE_Pressed, this, &APlayerCharacter::CancelInspection);
 	PlayerInputComponent->BindAction("Cursor", IE_Pressed, this, &APlayerCharacter::ShowCursor);
+	PlayerInputComponent->BindAction("LeftClick", IE_Pressed, this, &APlayerCharacter::TryToUse);
 
 
 }
@@ -72,7 +73,7 @@ void APlayerCharacter::MoveRight(float Value)
 
 void APlayerCharacter::Interaction()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("E - Pressed. Action!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("E - Pressed. Action!"));
 	IInteractable* Interface = Cast<IInteractable>(LookAtActor);
 	if (IsValid(LookAtActor))
 	{
@@ -153,10 +154,34 @@ void APlayerCharacter::CancelInspection()
 	}
 }
 
-void APlayerCharacter::UseItem(AItem* Item)
+/*void APlayerCharacter::UseItem(AItem* Item)
 {
 	if (Item)
 	{
 		Item->DropItem();
 	}
+}*/
+
+void APlayerCharacter::TryToUse()
+{
+	APlayerController* Controll = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Try To Use"));
+	if (!Controll->bShowMouseCursor) return;
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Cursor"));
+	if (PlayerInventory->CurrentlyUsedItem == FItemDetailStruct()) return;
+
+	FString t = PlayerInventory->CurrentlyUsedItem.ItemName;
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, t);
+
+	FHitResult Hit;
+	FActorSpawnParameters SpawnParams;
+
+	Controll->GetHitResultUnderCursor(ECC_Visibility, false, Hit);
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Location: %s"), *Hit.Location.ToString()));
+	AItem* SpawnedActor = GetWorld()->SpawnActor<AItem>(PlayerInventory->CurrentlyUsedItem.ItemClass, Hit.Location, FRotator(), SpawnParams);
+	SpawnedActor->ItemDetails = PlayerInventory->CurrentlyUsedItem;
+	
+	PlayerInventory->RemoveItem(PlayerInventory->CurrentlyUsedItem);
+	
 }

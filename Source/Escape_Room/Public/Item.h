@@ -18,7 +18,7 @@ struct FItemDetailStruct
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
 	FString ItemName = "Default Item";
 
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item")
 	UStaticMesh* ItemMesh = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")

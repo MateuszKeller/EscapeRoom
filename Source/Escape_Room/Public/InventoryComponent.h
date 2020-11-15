@@ -47,5 +47,8 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FText Name = FText::FromString("TEST");
 
+	UPROPERTY(BlueprintReadWrite)
+	FItemDetailStruct CurrentlyUsedItem;
+
 		
 };
