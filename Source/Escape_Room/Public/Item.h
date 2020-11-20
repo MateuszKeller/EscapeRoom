@@ -10,43 +10,14 @@
 
 class APlayerCharacter;
 
-USTRUCT(BlueprintType)
-struct FItemDetailStruct
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
-	FString ItemName = "Default Item";
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item")
-	UStaticMesh* ItemMesh = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
-	UTexture2D* ItemThumbnail = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
-	TSubclassOf<AItem> ItemClass = nullptr;
-
-	bool operator==(const FItemDetailStruct& other) const {
-		return ItemName == other.ItemName && ItemClass == other.ItemClass;
-	}
-
-};
-
-UCLASS()
-class ESCAPE_ROOM_API AItem : public AActor, public IInteractable
+UCLASS(ABSTRACT)
+class ESCAPE_ROOM_API AItem : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
 	AItem();
-
-	///IInteractable:
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Interaction")
-	void OnLookAt(APlayerCharacter* Player);
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Interaction")
-	void InteractWith(APlayerCharacter* Player);
 
 protected:
 	// Called when the game starts or when spawned
@@ -55,30 +26,34 @@ protected:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable)
-	void PickUp(APlayerCharacter* Player);
+	// Called to bind functionality to input
+	void SetupPlayerInputComponent();
+
+	//Moving forward and backward
+	UFUNCTION()
+	void Turn(float Value);
+	//Moving left and right
+	UFUNCTION()
+	void LookUp(float Value);
+
+	void AllowRotation();
+
 
 	UFUNCTION(BlueprintCallable)
 	void Inspect(APlayerCharacter* Player);
 
+	UFUNCTION(BlueprintCallable)
+	virtual	void DropItem();
+
 public:
 
-	UFUNCTION(BlueprintCallable)
-	void DropItem();
-
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category = "Item")
-	FItemDetailStruct ItemDetails;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Item")
-	class USphereComponent* ItemInteractCollision;
+	class UCapsuleComponent* ItemInteractCollision;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Item")
 	class UStaticMeshComponent* ItemMeshComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Item")
-	FTransform ItemWorldPosition;
-
 	//Does actor is rotating during inspection 
 	UPROPERTY(BlueprintReadWrite)
-	bool isRotating;
+	bool bIsRotating = false;
 };

@@ -16,6 +16,7 @@ class UInteractable : public UInterface
 	GENERATED_BODY()
 };
 
+
 /**
  * 
  */
@@ -32,5 +33,5 @@ public:
 
 	//Event function when player tries to interact with something
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
-	void InteractWith(APlayerCharacter* Player);
+	void OnInteract(APlayerCharacter* Player);
 };

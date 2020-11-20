@@ -31,18 +31,74 @@ void APuzzle::BeginPlay()
 {
 	Super::BeginPlay();
 
+	SetupPlayerInputComponent();
+
+	for (APuzzlePart* Part : PuzzleParts)
+	{
+		if (IsValid(Part))
+		{
+			Part->OnSolve.AddDynamic(this, &APuzzle::TryToSolve);
+		}
+	}	
 }
 
 // Called every frame
 void APuzzle::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
 
+void APuzzle::SetupPlayerInputComponent()
+{
+	EnableInput(GetWorld()->GetFirstPlayerController());
+
+	if (this->InputComponent)
+	{
+		this->InputComponent->BindAction("Interact", IE_Pressed, this, &APuzzle::ChangeView);
+		this->InputComponent->BindAction("RightClick", IE_Pressed, this, &APuzzle::AllowRotation);
+		this->InputComponent->BindAction("RightClick", IE_Released, this, &APuzzle::AllowRotation);
+
+		this->InputComponent->BindAxis("Turn", this, &APuzzle::Turn);
+		this->InputComponent->BindAxis("LookUp", this, &APuzzle::LookUp);
+	}
+	DisableInput(GetWorld()->GetFirstPlayerController());
+}
+
+void APuzzle::Turn(float Value)
+{
+	if (bIsRotating)
+	{
+		CameraRoot->AddLocalRotation(FRotator(0, Value * 3.0, 0));
+	}
+}
+
+void APuzzle::LookUp(float Value)
+{
+	if (bIsRotating)
+	{
+		SpringArm->AddLocalRotation(FRotator(Value * 3.0, 0, 0));
+	}
+}
+
+void APuzzle::AllowRotation()
+{
+	bIsRotating = !bIsRotating;
+}
+
+void APuzzle::OnLookAt_Implementation(APlayerCharacter* Player)
+{
+	Player->OnMessageUpdate.Broadcast(Message);
+}
+
+void APuzzle::OnInteract_Implementation(APlayerCharacter* Player)
+{
+	Player->OnMessageUpdate.Broadcast(FText::FromString(""));
+	ChangeView();
 }
 
 void APuzzle::ChangeView()
 {
-	auto Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	APlayerController* Controller = GetWorld()->GetFirstPlayerController();
 	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 	AActor* From;
@@ -51,8 +107,10 @@ void APuzzle::ChangeView()
 	if (Player->State == EPlayerCharacterState::None)
 	{
 		From = Cast<AActor>(Player);
+		From->SetActorTickEnabled(false);
 		To = Cast<AActor>(this);
 
+		
 		Controller->bShowMouseCursor = true;
 		FInputModeGameAndUI InputMode = FInputModeGameAndUI();
 		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockInFullscreen);
@@ -67,6 +125,7 @@ void APuzzle::ChangeView()
 	{
 		From = Cast<AActor>(this);
 		To = Cast<AActor>(Player);
+		To->SetActorTickEnabled(true);
 
 		Controller->bShowMouseCursor = false;
 		Controller->SetInputMode(FInputModeGameOnly());
@@ -78,3 +137,20 @@ void APuzzle::ChangeView()
 	From->DisableInput(Controller);
 	To->EnableInput(Controller);
 }
+
+void APuzzle::TryToSolve()
+{
+	for (APuzzlePart* Part : PuzzleParts)
+	{
+		if (!Part->bIsSolved) return;
+	}
+	bIsSolved = true;
+
+	for (APuzzleAnswerer* Answerer : PuzzleAnswerers)
+	{
+		Answerer->Answer();
+	}
+}
+
+
+

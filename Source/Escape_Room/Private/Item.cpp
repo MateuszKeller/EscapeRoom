@@ -2,9 +2,7 @@
 
 #include "Item.h"
 #include "PlayerCharacter.h"
-#include "Components/PrimitiveComponent.h"
-#include "Components/StaticMeshComponent.h"
-#include "Components/SphereComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -16,7 +14,8 @@ AItem::AItem()
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 
-	ItemInteractCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Interaction Sphere"));
+	ItemInteractCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Interaction Capsule"));
+	ItemInteractCollision->InitCapsuleSize(32.f, 32.f);
 	ItemInteractCollision->SetupAttachment(RootComponent);
 
 	ItemMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Item Mesh"));
@@ -28,51 +27,65 @@ void AItem::BeginPlay()
 {
 	Super::BeginPlay();	
 
-	ItemWorldPosition = this->GetActorTransform();
-
-	ItemDetails.ItemClass = this->GetClass();
-	ItemDetails.ItemMesh = ItemMeshComponent->GetStaticMesh();
-
+	SetupPlayerInputComponent();
 }
 
 // Called every frame
 void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-void AItem::PickUp(APlayerCharacter* Player)
+void AItem::SetupPlayerInputComponent()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Can't touch me!"));
+	EnableInput(GetWorld()->GetFirstPlayerController());
 
-	if(Player->PlayerInventory->AddItem(ItemDetails))
-		this->Destroy();
+	if (this->InputComponent)
+	{
+		this->InputComponent->BindAction("Interact", IE_Pressed, this, &AItem::DropItem);
+		this->InputComponent->BindAction("RightClick", IE_Pressed, this, &AItem::AllowRotation);
+		this->InputComponent->BindAction("RightClick", IE_Released, this, &AItem::AllowRotation);
 
-	/*
-	ItemMesh->SetSimulatePhysics(false);
-	this->SetActorEnableCollision(false);
+		this->InputComponent->BindAxis("Turn", this, &AItem::Turn);
+		this->InputComponent->BindAxis("LookUp", this, &AItem::LookUp);
+	}
+	DisableInput(GetWorld()->GetFirstPlayerController());
+}
 
-	FAttachmentTransformRules rules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepRelative, true);
-	AttachToComponent(Player->ItemGrip, rules);
-	//InteractCollision->SetSimulatePhysics(false);
 
-	Player->HoldItem = this;*/
+void AItem::Turn(float Value)
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Turn"));
+	if (bIsRotating)
+	{
+		RootComponent->AddLocalRotation(FRotator(0, Value * 3.0, 0));
+	}
+}
 
-	
+void AItem::LookUp(float Value)
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("LookUp"));
+	if (bIsRotating)
+	{
+		RootComponent->AddLocalRotation(FRotator(Value * 3.0, 0, 0));
+	}
+}
+
+void AItem::AllowRotation()
+{
+	bIsRotating = !bIsRotating;
 }
 
 void AItem::Inspect(APlayerCharacter* Player)
 {
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Inspection?!"));
 	ItemMeshComponent->SetSimulatePhysics(false);
 	this->SetActorEnableCollision(false);
 
 	FAttachmentTransformRules rules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepRelative, true);
 	AttachToComponent(Player->ItemGrip, rules);
 	//InteractCollision->SetSimulatePhysics(false);
-
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Inspection?!"));
-
+	
 	APlayerController* Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	Controller->bShowMouseCursor = true;
 	FInputModeGameAndUI InputMode = FInputModeGameAndUI();
@@ -83,27 +96,9 @@ void AItem::Inspect(APlayerCharacter* Player)
 	Player->DisableInput(Controller);
 	this->EnableInput(Controller);
 	Player->State = EPlayerCharacterState::Inspection;
-
 }
 
 void AItem::DropItem()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Hehe I'm free!"));
-	
-	FDetachmentTransformRules rules = FDetachmentTransformRules(EDetachmentRule::KeepWorld, true);
-	DetachFromActor(rules);
-	this->SetActorTransform(ItemWorldPosition);
-	this->SetActorEnableCollision(true);
-	//ItemMesh->SetSimulatePhysics(true);
-
-	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	APlayerController* Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	Controller->bShowMouseCursor = false;
-	Controller->SetInputMode(FInputModeGameOnly());
-
-	Player->HoldItem = nullptr;
-	this->DisableInput(Controller);
-	Player->EnableInput(Controller);
-	Player->State = EPlayerCharacterState::None;
 
 }

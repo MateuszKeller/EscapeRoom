@@ -3,14 +3,14 @@
 
 #include "ItemComponent.h"
 #include "PlayerCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UItemComponent::UItemComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
+	PrimaryComponentTick.bCanEverTick = false;
 	// ...
 }
 
@@ -20,7 +20,6 @@ void UItemComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ItemDetails.ItemMesh = GetStaticMesh();
 	// ...
 	
 }
@@ -34,18 +33,9 @@ void UItemComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// ...
 }
 
-bool UItemComponent::PickUp(APlayerCharacter* Player)
+bool UItemComponent::CheckUsedItem()
 {
-	if (Player->State == EPlayerCharacterState::Puzzle)
-	{
-		if (Player->PlayerInventory->AddItem(ItemDetails))
-		{
-			DestroyComponent();
-			return true;
-		}
-		
-		
-	}
+	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	return KeyItem == Player->PlayerInventory->CurrentlyUsedItem.ItemClass ? true : false;
 
-	return false;
 }

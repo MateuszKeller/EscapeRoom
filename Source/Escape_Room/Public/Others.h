@@ -14,3 +14,9 @@ enum class EPlayerCharacterState : uint8
 	Inspection	UMETA(DisplayName = "Inspection"),
 	Puzzle		UMETA(DisplayName = "Puzzle")
 };
+
+
+/*###
+DrawDebugLine(GetWorld(), CameraLocation, End, FColor::Orange, false, 2.0f);
+GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Orange, TEXT("DebugMessage"));
+*/

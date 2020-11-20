@@ -10,8 +10,6 @@ UInventoryComponent::UInventoryComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
-	
-
 	// ...
 }
 
@@ -46,13 +44,6 @@ bool UInventoryComponent::RemoveItem(FItemDetailStruct ItemStruct)
 	OnInventoryUpdated.Broadcast();
 
 	CurrentlyUsedItem = FItemDetailStruct();
-	/*if (Item)
-	{
-		//Item->OwnerInventory = nullptr;
-		Items.Remove(Item);
-		
-		//Item->Destroy();
-	}*/
 
 	return true;
 }

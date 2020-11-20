@@ -29,7 +29,6 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -37,6 +36,11 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	APlayerController* Controll = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (!CheckLookAt() && !Controll->bShowMouseCursor)
+	{
+		OnMessageUpdate.Broadcast(FText::FromString(""));
+	}
 }
 
 // Called to bind functionality to input
@@ -47,15 +51,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 
-	PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::Turn);
+	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::LookUp);
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interaction);
-	PlayerInputComponent->BindAction("Cancel", IE_Pressed, this, &APlayerCharacter::CancelInspection);
 	PlayerInputComponent->BindAction("Cursor", IE_Pressed, this, &APlayerCharacter::ShowCursor);
-	PlayerInputComponent->BindAction("LeftClick", IE_Pressed, this, &APlayerCharacter::TryToUse);
-
-
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -71,17 +71,27 @@ void APlayerCharacter::MoveRight(float Value)
 	AddMovementInput(Direction, Value);
 }
 
+void APlayerCharacter::Turn(float Value)
+{
+	AddControllerYawInput(Value);
+}
+
+void APlayerCharacter::LookUp(float Value)
+{
+	AddControllerPitchInput(Value);
+}
+
 void APlayerCharacter::Interaction()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("E - Pressed. Action!"));
 	IInteractable* Interface = Cast<IInteractable>(LookAtActor);
 	if (IsValid(LookAtActor))
 	{
-		Interface->Execute_InteractWith(LookAtActor, this);
+		Interface->Execute_OnInteract(LookAtActor, this);
 	}
 	else if(IsValid(HoldItem))
 	{
-		Interface->Execute_InteractWith(HoldItem, this);
+		Interface->Execute_OnInteract(HoldItem, this);
 	}
 }
 
@@ -113,6 +123,8 @@ void APlayerCharacter::ShowCursor()
 
 AActor* APlayerCharacter::CheckLookAt()
 {
+	if (State != EPlayerCharacterState::None) return nullptr;
+
 	FVector CameraLocation;
 	FRotator CameraRotation;
 	FHitResult Hit;
@@ -122,66 +134,34 @@ AActor* APlayerCharacter::CheckLookAt()
 
 	FCollisionQueryParams Params;
 	GetWorld()->LineTraceSingleByChannel(Hit, CameraLocation, End, ECC_Camera, Params);
-	//DrawDebugLine(GetWorld(), CameraLocation, End, FColor::Orange, false, 2.0f);
 	
 	AActor* HitActor = Hit.GetActor();
-	IInteractable* Interface = Cast<IInteractable>(LookAtActor);
 	if (IsValid(HitActor))
 	{
-		bool bInteractable = HitActor->GetClass()->ImplementsInterface(UInteractable::StaticClass());	
+		bool bInteractable = HitActor->GetClass()->ImplementsInterface(UInteractable::StaticClass());
 		if (bInteractable)
 		{
+			IInteractable* Interface = Cast<IInteractable>(LookAtActor);
 			if (LookAtActor != HitActor)
 			{
 				LookAtActor = HitActor;
 				Interface->Execute_OnLookAt(LookAtActor, this);
 			}
 		}
+		else
+		{
+			LookAtActor = nullptr;
+		}
 	}
 	else
 	{
 		LookAtActor = nullptr;
 	}
-
 	return LookAtActor;
 }
 
-void APlayerCharacter::CancelInspection()
+void APlayerCharacter::RemoveUsedItem()
 {
-	if (IsValid(HoldItem))
-	{
-		HoldItem->DropItem();
-	}
-}
-
-/*void APlayerCharacter::UseItem(AItem* Item)
-{
-	if (Item)
-	{
-		Item->DropItem();
-	}
-}*/
-
-void APlayerCharacter::TryToUse()
-{
-	APlayerController* Controll = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Try To Use"));
-	if (!Controll->bShowMouseCursor) return;
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, TEXT("Cursor"));
-	if (PlayerInventory->CurrentlyUsedItem == FItemDetailStruct()) return;
-
-	FString t = PlayerInventory->CurrentlyUsedItem.ItemName;
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, t);
-
-	FHitResult Hit;
-	FActorSpawnParameters SpawnParams;
-
-	Controll->GetHitResultUnderCursor(ECC_Visibility, false, Hit);
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Orange, FString::Printf(TEXT("Location: %s"), *Hit.Location.ToString()));
-	AItem* SpawnedActor = GetWorld()->SpawnActor<AItem>(PlayerInventory->CurrentlyUsedItem.ItemClass, Hit.Location, FRotator(), SpawnParams);
-	SpawnedActor->ItemDetails = PlayerInventory->CurrentlyUsedItem;
-	
 	PlayerInventory->RemoveItem(PlayerInventory->CurrentlyUsedItem);
-	
+	PlayerInventory->CurrentlyUsedItem = FItemDetailStruct();
 }

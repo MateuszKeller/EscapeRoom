@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/StaticMeshComponent.h"
-#include "Item.h"
+#include "Components/ActorComponent.h"
+#include "InventoryItem.h"
 #include "ItemComponent.generated.h"
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class ESCAPE_ROOM_API UItemComponent : public UStaticMeshComponent
+class ESCAPE_ROOM_API UItemComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -25,9 +25,8 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item")
-	FItemDetailStruct ItemDetails;
+	TSubclassOf<AInventoryItem> KeyItem;
 
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	bool PickUp(APlayerCharacter* Player);
-		
+	bool CheckUsedItem();
 };

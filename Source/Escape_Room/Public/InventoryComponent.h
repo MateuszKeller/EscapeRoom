@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Item.h"
+#include "InventoryItem.h"
 #include "InventoryComponent.generated.h"
 
 
 
 //class AItem;
 
-//Delegate to bind BP to update UI
+//Delegate to bind BP to update Inventory
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryUpdated);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -29,7 +29,7 @@ protected:
 
 public:	
 	
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	bool AddItem(FItemDetailStruct ItemStruct);
 
 	UFUNCTION(BlueprintCallable)
@@ -44,11 +44,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int32 SlotsAmount = 6;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	FText Name = FText::FromString("TEST");
-
 	UPROPERTY(BlueprintReadWrite)
 	FItemDetailStruct CurrentlyUsedItem;
-
-		
 };

@@ -10,8 +10,10 @@
 #include "Others.h"
 #include "PlayerCharacter.generated.h"
 
+//Delegate to bind BP to update message shown on UI
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMessageUpdate, FText, Message);
 
-UCLASS()
+UCLASS(ABSTRACT)
 class ESCAPE_ROOM_API APlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
@@ -38,6 +40,15 @@ protected:
 	UFUNCTION()
 	void MoveRight(float Value);
 
+	//Moving forward and backward
+	UFUNCTION()
+	void Turn(float Value);
+
+	//Moving left and right
+	UFUNCTION()
+	void LookUp(float Value);
+
+
 	//Interacting with actor
 	UFUNCTION()
 	void Interaction();
@@ -50,16 +61,13 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	AActor* CheckLookAt();
 
-	void CancelInspection();
-
 	UFUNCTION(BlueprintCallable)
-	void TryToUse();
+	void RemoveUsedItem();
 
 public:
 
-	//TODO change/delete
-	//UFUNCTION(BlueprintCallable)
-	//void UseItem(class AItem* Item);
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnMessageUpdate OnMessageUpdate;
 
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* PlayerCamera;
@@ -70,6 +78,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UInventoryComponent* PlayerInventory;
 
+
 	AActor* LookAtActor = nullptr;
 
 	UPROPERTY(BlueprintReadWrite)
@@ -79,5 +88,5 @@ public:
 	USceneComponent* ItemGrip;
 	
 	UPROPERTY(EditAnywhere)
-	float TraceDistance = 250.f;
+	float TraceDistance = 175.f;
 };
