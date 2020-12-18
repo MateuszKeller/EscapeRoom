@@ -33,7 +33,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Puzzle Part")
 	class UCapsuleComponent* PuzzlePartInteractCollision;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Puzzle Part")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Puzzle Part")
 	class UStaticMeshComponent* PuzzlePartMeshComponent;
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)

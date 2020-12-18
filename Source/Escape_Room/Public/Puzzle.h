@@ -32,17 +32,7 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
-	void SetupPlayerInputComponent();
-
-	//Moving forward and backward
-	UFUNCTION()
-	void Turn(float Value);
-
-	//Moving left and right
-	UFUNCTION()
-	void LookUp(float Value);
-
-	void AllowRotation();
+	virtual void SetupPlayerInputComponent();
 
 	///IInteractable:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
@@ -59,40 +49,26 @@ protected:
 	void ChangeView();
 
 	//
-	UFUNCTION(BlueprintCallable)
-	void TryToSolve();
+	/*UFUNCTION(BlueprintCallable)
+	void TryToSolve();*/
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Interaction")
 	void OnSolve();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	USceneComponent* CameraRoot;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	USpringArmComponent* SpringArm;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCameraComponent* PuzzleCamera;
 
-	UPROPERTY(EditAnywhere)
-	USphereComponent* InteractCollision;
+	/*UPROPERTY(EditAnywhere)
+	USphereComponent* InteractCollision;*/
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* PuzzleMesh;
 
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<APuzzlePart*> PuzzleParts;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<APuzzleAnswerer*> PuzzleAnswerers;
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<APuzzleAnswerer*> PuzzleAnswerers;*/
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Interaction")
 	FText Message = FText::FromString("[E] Solve");
-
-	//Does actor is rotating during inspection 
-	UPROPERTY(BlueprintReadWrite)
-	bool bIsRotating = false;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite)
 	bool bIsSolved = false;

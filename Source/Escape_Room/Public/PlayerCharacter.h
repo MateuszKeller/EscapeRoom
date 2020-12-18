@@ -13,6 +13,8 @@
 //Delegate to bind BP to update message shown on UI
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMessageUpdate, FText, Message);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEyepieceUse);
+
 UCLASS(ABSTRACT)
 class ESCAPE_ROOM_API APlayerCharacter : public ACharacter
 {
@@ -64,10 +66,15 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void RemoveUsedItem();
 
+	void Eyepiece();
+
 public:
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnMessageUpdate OnMessageUpdate;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnEyepieceUse OnEyepieceUsed;
 
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* PlayerCamera;
@@ -89,4 +96,7 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	float TraceDistance = 175.f;
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	bool bHasEyepiece = false;
 };

@@ -56,6 +56,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interaction);
 	PlayerInputComponent->BindAction("Cursor", IE_Pressed, this, &APlayerCharacter::ShowCursor);
+
+	PlayerInputComponent->BindAction("Eyepiece", IE_Pressed, this, &APlayerCharacter::Eyepiece);
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -164,4 +166,10 @@ void APlayerCharacter::RemoveUsedItem()
 {
 	PlayerInventory->RemoveItem(PlayerInventory->CurrentlyUsedItem);
 	PlayerInventory->CurrentlyUsedItem = FItemDetailStruct();
+}
+
+void APlayerCharacter::Eyepiece()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Orange, TEXT("Eyepiece"));
+	OnEyepieceUsed.Broadcast();
 }
