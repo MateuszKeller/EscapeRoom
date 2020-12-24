@@ -80,7 +80,6 @@ void ARods::ChangeColor(UPrimitiveComponent* TouchedComponent, FKey ButtonPresse
 	Current.Add(Cast<UStaticMeshComponent>(TouchedComponent), ColorNumber);
 	ChangeMaterial(Cast<UStaticMeshComponent>(TouchedComponent), Colors[ColorNumber]);
 
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("Click!")));
 	if (IsSolved())
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("Rods.cpp - SOLVED")));

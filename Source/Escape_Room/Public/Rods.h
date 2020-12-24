@@ -39,10 +39,10 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
     TArray<FColor> Colors;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TMap<UStaticMeshComponent*, int32> Current;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TMap<UStaticMeshComponent*, int32> Solution;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)

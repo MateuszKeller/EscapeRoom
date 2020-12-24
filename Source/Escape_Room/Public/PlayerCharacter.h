@@ -63,12 +63,12 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	AActor* CheckLookAt();
 
-	UFUNCTION(BlueprintCallable)
-	void RemoveUsedItem();
-
 	void Eyepiece();
 
 public:
+
+	UFUNCTION(BlueprintCallable)
+		void RemoveUsedItem();
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnMessageUpdate OnMessageUpdate;

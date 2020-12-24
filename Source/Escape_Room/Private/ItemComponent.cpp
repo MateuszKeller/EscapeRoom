@@ -36,6 +36,10 @@ void UItemComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 bool UItemComponent::CheckUsedItem()
 {
 	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	return KeyItem == Player->PlayerInventory->CurrentlyUsedItem.ItemClass ? true : false;
-
+	bool bIsCorrectItem = (KeyItem == Player->PlayerInventory->CurrentlyUsedItem.ItemClass ? true : false);
+	if (bIsCorrectItem)
+	{
+		Player->RemoveUsedItem();
+	}
+	return bIsCorrectItem;
 }
