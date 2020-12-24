@@ -49,8 +49,8 @@ protected:
 	void ChangeView();
 
 	//
-	/*UFUNCTION(BlueprintCallable)
-	void TryToSolve();*/
+	UFUNCTION(BlueprintCallable)
+	virtual bool IsSolved();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Interaction")
 	void OnSolve();

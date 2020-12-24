@@ -170,6 +170,8 @@ void APlayerCharacter::RemoveUsedItem()
 
 void APlayerCharacter::Eyepiece()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Orange, TEXT("Eyepiece"));
-	OnEyepieceUsed.Broadcast();
+	if (bHasEyepiece)
+	{
+		OnEyepieceUsed.Broadcast();
+	}
 }

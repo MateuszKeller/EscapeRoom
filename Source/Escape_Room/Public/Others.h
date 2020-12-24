@@ -18,5 +18,5 @@ enum class EPlayerCharacterState : uint8
 
 /*###
 DrawDebugLine(GetWorld(), CameraLocation, End, FColor::Orange, false, 2.0f);
-GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Orange, TEXT("DebugMessage"));
+GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("*.cpp - %s"), *));
 */

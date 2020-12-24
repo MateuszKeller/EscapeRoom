@@ -66,13 +66,17 @@ void APuzzle::SetupPlayerInputComponent()
 
 void APuzzle::OnLookAt_Implementation(APlayerCharacter* Player)
 {
-	Player->OnMessageUpdate.Broadcast(Message);
+	if(!bIsSolved)
+		Player->OnMessageUpdate.Broadcast(Message);
 }
 
 void APuzzle::OnInteract_Implementation(APlayerCharacter* Player)
 {
-	Player->OnMessageUpdate.Broadcast(FText::FromString(""));
-	ChangeView();
+	if(!bIsSolved)
+	{
+		Player->OnMessageUpdate.Broadcast(FText::FromString(""));
+		ChangeView();
+	}
 }
 
 void APuzzle::ChangeView()
@@ -117,7 +121,12 @@ void APuzzle::ChangeView()
 	To->EnableInput(Controller);
 }
 
-//void APuzzle::TryToSolve()
+bool APuzzle::IsSolved()
+{
+	return bIsSolved;
+}
+
+//void APuzzle::IsSolved()
 //{
 //	for (APuzzlePart* Part : PuzzleParts)
 //	{
