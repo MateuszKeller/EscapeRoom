@@ -68,7 +68,7 @@ protected:
 public:
 
 	UFUNCTION(BlueprintCallable)
-		void RemoveUsedItem();
+	void RemoveUsedItem();
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnMessageUpdate OnMessageUpdate;

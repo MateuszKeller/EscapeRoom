@@ -26,19 +26,18 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintImplementableEvent)
 	void Solve();
 
-
-	UPROPERTY(EditDefaultsOnly, Category = "Puzzle Part")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Puzzle Part")
 	class UCapsuleComponent* PuzzlePartInteractCollision;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Puzzle Part")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Puzzle Part")
 	class UStaticMeshComponent* PuzzlePartMeshComponent;
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnSolve OnSolve;
 
-	UPROPERTY(EditInstanceOnly, Category = "Puzzle Part")
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Puzzle Part")
 	bool bIsSolved = false;
 };

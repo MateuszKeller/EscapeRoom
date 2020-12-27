@@ -13,15 +13,19 @@ ARods::ARods()
 	RootComponent = InteractCollision;*/
 
 	Rod_0 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Rod_0"));
-	Rod_0->SetupAttachment(RootComponent);
+	Rod_0->SetupAttachment(Handle);
 	Rod_1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Rod_1"));
-	Rod_1->SetupAttachment(RootComponent);
+	Rod_1->SetupAttachment(Handle);
 	Rod_2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Rod_2"));
-	Rod_2->SetupAttachment(RootComponent);
+	Rod_2->SetupAttachment(Handle);
 	Rod_3 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Rod_3"));
-	Rod_3->SetupAttachment(RootComponent);
+	Rod_3->SetupAttachment(Handle);
 	Rod_4 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Rod_4"));
-	Rod_4->SetupAttachment(RootComponent);
+	Rod_4->SetupAttachment(Handle);
+
+	Colors.Empty();
+	Current.Empty();
+	Solution.Empty();
 
 	Colors.Add(FColor::White);
 
@@ -31,7 +35,7 @@ ARods::ARods()
 	Current.Add(Rod_3, 0);
 	Current.Add(Rod_4, 0);
 
-	Solution.Add(Rod_0, 0);
+	Solution.Add(Rod_0, 1);
 	Solution.Add(Rod_1, 0);
 	Solution.Add(Rod_2, 0);
 	Solution.Add(Rod_3, 0);

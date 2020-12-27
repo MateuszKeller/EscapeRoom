@@ -3,6 +3,7 @@
 
 #include "ItemComponent.h"
 #include "PlayerCharacter.h"
+#include "PuzzlePart.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
@@ -33,13 +34,21 @@ void UItemComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// ...
 }
 
-bool UItemComponent::CheckUsedItem()
+void UItemComponent::CheckUsedItem()
 {
 	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	bool bIsCorrectItem = (KeyItem == Player->PlayerInventory->CurrentlyUsedItem.ItemClass ? true : false);
+	auto UsedItem = Player->PlayerInventory->CurrentlyUsedItem;
+	bool bIsCorrectItem = (KeyItemClass == UsedItem.ItemClass && KeyItemName == UsedItem.ItemName ? true : false);
+		 
 	if (bIsCorrectItem)
 	{
+		Cast<APuzzlePart>(GetOwner())->Solve();
 		Player->RemoveUsedItem();
 	}
-	return bIsCorrectItem;
+	else
+	{
+		Player->OnMessageUpdate.Broadcast(FText::FromString("You Picked The Wrong House Foul"));
+	}
+	
 }
+

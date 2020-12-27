@@ -34,8 +34,8 @@ void APuzzlePart::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void APuzzlePart::Solve()
-{
-	bIsSolved = true;
-	OnSolve.Broadcast();
-}
+//void APuzzlePart::Solve()
+//{
+//	//bIsSolved = true;
+//	//OnSolve.Broadcast();
+//}

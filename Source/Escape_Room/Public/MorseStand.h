@@ -4,19 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "Puzzle.h"
-#include "EyepieceStand.generated.h"
+#include "MorseStand.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ESCAPE_ROOM_API AEyepieceStand : public APuzzle
+class ESCAPE_ROOM_API AMorseStand : public APuzzle
 {
 	GENERATED_BODY()
 	
 public:
 	// Sets default values for this actor's properties
-	AEyepieceStand();
+	AMorseStand();
 
 protected:
 	// Called when the game starts or when spawned
@@ -29,26 +29,37 @@ protected:
 
 public:
 	UFUNCTION()
-	void RotatePart(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed);
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<UStaticMeshComponent*, FRotator> Current;
+	void SendLetter(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed);
+
+	UFUNCTION()
+	void Reset();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<UStaticMeshComponent*, FRotator> Solution;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UStaticMeshComponent* BasePart;
+	TMap<UStaticMeshComponent*, FString> Letters;
+
+	FString Word;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UStaticMeshComponent* Part_0;
+	FString Solution = "R'lyeh";
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UStaticMeshComponent* Part_1;
+	UStaticMeshComponent* Speaker;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UStaticMeshComponent* Part_2;
+	UStaticMeshComponent* Button_0;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	UStaticMeshComponent* Part_3;
+	UStaticMeshComponent* Button_1;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UStaticMeshComponent* Button_2;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UStaticMeshComponent* Button_3;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UStaticMeshComponent* Button_4;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UStaticMeshComponent* Button_5;
 };

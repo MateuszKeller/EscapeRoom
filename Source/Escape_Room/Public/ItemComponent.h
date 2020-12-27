@@ -24,9 +24,13 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item")
-	TSubclassOf<AInventoryItem> KeyItem;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
+	TSubclassOf<AInventoryItem> KeyItemClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
+	FName KeyItemName = FName(*FString("Default Item"));
 
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	bool CheckUsedItem();
+	void CheckUsedItem();
+
 };

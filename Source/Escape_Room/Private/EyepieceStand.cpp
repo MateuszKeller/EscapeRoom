@@ -12,7 +12,7 @@ AEyepieceStand::AEyepieceStand()
 	/*InteractCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Interaction Sphere"));
 	RootComponent = InteractCollision;*/
 	BasePart = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base Part"));
-	BasePart->SetupAttachment(RootComponent);
+	BasePart->SetupAttachment(Handle);
 
 	Part_0 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Part_0"));
 	Part_0->SetupAttachment(BasePart);
@@ -23,6 +23,8 @@ AEyepieceStand::AEyepieceStand()
 	Part_3 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Part_3"));
 	Part_3->SetupAttachment(BasePart);
 	
+	Current.Empty();
+	Solution.Empty();
 	Current.Add(Part_0, FRotator());
 	Current.Add(Part_1, FRotator());
 	Current.Add(Part_2, FRotator());
@@ -74,11 +76,10 @@ void AEyepieceStand::RotatePart(UPrimitiveComponent* TouchedComponent, FKey Butt
 {
 	FRotator Rotation = Current[Cast<UStaticMeshComponent>(TouchedComponent)];
 	Current.Add(Cast<UStaticMeshComponent>(TouchedComponent), Rotation.Add(-30.f, 0.f, 0.f));
-	TouchedComponent->AddRelativeRotation(FRotator(-30.f, 0.f, 0.f), true);
+	TouchedComponent->AddLocalRotation(FRotator(-30.f, 0.f, 0.f), true);
 
 	if (IsSolved())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("EyepieceStand.cpp - SOLVED")));
 		OnSolve();
 		bIsSolved = true;
 	}

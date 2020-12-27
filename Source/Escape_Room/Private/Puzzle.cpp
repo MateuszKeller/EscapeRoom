@@ -8,7 +8,7 @@
 APuzzle::APuzzle()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	/*InteractCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Interaction Sphere"));
 	RootComponent = InteractCollision;*/
@@ -24,6 +24,9 @@ APuzzle::APuzzle()
 
 	PuzzleCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	PuzzleCamera->SetupAttachment(PuzzleMesh);
+
+	Handle = CreateDefaultSubobject<USceneComponent>(TEXT("Parts Handle"));
+	Handle->SetupAttachment(PuzzleMesh);
 }
 
 // Called when the game starts or when spawned
@@ -126,7 +129,7 @@ bool APuzzle::IsSolved()
 	return bIsSolved;
 }
 
-//void APuzzle::IsSolved()
+//void APuzzle::TryToSolve()
 //{
 //	for (APuzzlePart* Part : PuzzleParts)
 //	{

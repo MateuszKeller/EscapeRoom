@@ -64,6 +64,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* PuzzleMesh;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	USceneComponent* Handle;
+
 	/*UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<APuzzleAnswerer*> PuzzleAnswerers;*/
 
