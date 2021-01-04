@@ -135,7 +135,7 @@ AActor* APlayerCharacter::CheckLookAt()
 	FVector End = CameraLocation + (CameraRotation.Vector() * TraceDistance);
 
 	FCollisionQueryParams Params;
-	GetWorld()->LineTraceSingleByChannel(Hit, CameraLocation, End, ECC_Camera, Params);
+	GetWorld()->LineTraceSingleByChannel(Hit, CameraLocation, End, ECC_Visibility, Params);
 	
 	AActor* HitActor = Hit.GetActor();
 	if (IsValid(HitActor))
