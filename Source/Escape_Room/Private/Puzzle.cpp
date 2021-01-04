@@ -100,8 +100,9 @@ void APuzzle::ChangeView()
 		Controller->bShowMouseCursor = true;
 		FInputModeGameAndUI InputMode = FInputModeGameAndUI();
 		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockInFullscreen);
-		//InputMode.SetHideCursorDuringCapture(false);
+		InputMode.SetHideCursorDuringCapture(false);
 		Controller->SetInputMode(InputMode);
+		//Controller->SetIgnoreLookInput(true);
 		Player->State = EPlayerCharacterState::Puzzle;
 
 		const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
@@ -119,7 +120,7 @@ void APuzzle::ChangeView()
 		Player->State = EPlayerCharacterState::None;
 	}
 
-	Controller->SetViewTargetWithBlend(To, 0.5f);
+	Controller->SetViewTargetWithBlend(To, Time);
 	From->DisableInput(Controller);
 	To->EnableInput(Controller);
 }

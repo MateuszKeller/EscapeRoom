@@ -11,6 +11,7 @@
 #include "Interactable.h"
 #include "PuzzlePart.h"
 #include "PuzzleAnswerer.h"
+#include "Kismet/GameplayStatics.h"
 #include "Puzzle.generated.h"
 
 class APlayerCharacter;
@@ -52,7 +53,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	virtual bool IsSolved();
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Interaction")
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Interaction")
 	void OnSolve();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -75,4 +76,7 @@ protected:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite)
 	bool bIsSolved = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Interaction")
+	float Time = 0.5;
 };

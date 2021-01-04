@@ -18,6 +18,7 @@ void AInventoryItem::BeginPlay()
 
 	ItemDetails.ItemClass = this->GetClass();
 	ItemDetails.ItemMesh = ItemMeshComponent->GetStaticMesh();
+	ItemDetails.ItemTransform = ItemMeshComponent->GetRelativeTransform();
 }
 
 void AInventoryItem::Take(APlayerCharacter* Player)

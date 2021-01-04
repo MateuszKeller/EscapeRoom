@@ -36,7 +36,7 @@ protected:
 	UFUNCTION()
 	void LookUp(float Value);
 
-	void AllowRotation();
+	void ToggleRotation();
 
 
 	UFUNCTION(BlueprintCallable)
@@ -56,4 +56,5 @@ public:
 	//Does actor is rotating during inspection 
 	UPROPERTY(BlueprintReadWrite)
 	bool bIsRotating = false;
+
 };

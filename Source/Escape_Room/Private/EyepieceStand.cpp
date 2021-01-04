@@ -2,6 +2,8 @@
 
 
 #include "EyepieceStand.h"
+#include "Others.h"
+#include "PlayerCharacter.h"
 
 // Sets default values
 AEyepieceStand::AEyepieceStand()
@@ -50,6 +52,7 @@ void AEyepieceStand::BeginPlay()
 	Current.Add(Part_1, Part_1->GetRelativeRotation());
 	Current.Add(Part_2, Part_2->GetRelativeRotation());
 	Current.Add(Part_3, Part_3->GetRelativeRotation());
+
 }
 
 // Called every frame
@@ -74,14 +77,20 @@ bool AEyepieceStand::IsSolved()
 
 void AEyepieceStand::RotatePart(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed)
 {
-	FRotator Rotation = Current[Cast<UStaticMeshComponent>(TouchedComponent)];
-	Current.Add(Cast<UStaticMeshComponent>(TouchedComponent), Rotation.Add(-30.f, 0.f, 0.f));
-	TouchedComponent->AddLocalRotation(FRotator(-30.f, 0.f, 0.f), true);
-
-	if (IsSolved())
+	
+	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (Player->State == EPlayerCharacterState::Puzzle)
 	{
-		OnSolve();
-		bIsSolved = true;
+		FRotator Rotation = Current[Cast<UStaticMeshComponent>(TouchedComponent)];
+		Current.Add(Cast<UStaticMeshComponent>(TouchedComponent), Rotation.Add(-30.f, 0.f, 0.f));
+		TouchedComponent->AddLocalRotation(FRotator(-30.f, 0.f, 0.f), true);
+
+		if (IsSolved())
+		{
+			OnSolve();
+			bIsSolved = true;
+		}
 	}
+	
 
 }

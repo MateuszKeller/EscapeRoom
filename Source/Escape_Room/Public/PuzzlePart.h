@@ -26,8 +26,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Puzzle Part")
 	void Solve();
+	virtual void Solve_Implementation();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Puzzle Part")
 	class UCapsuleComponent* PuzzlePartInteractCollision;

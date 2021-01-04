@@ -43,8 +43,8 @@ void AItem::SetupPlayerInputComponent()
 	if (this->InputComponent)
 	{
 		this->InputComponent->BindAction("Interact", IE_Pressed, this, &AItem::DropItem);
-		this->InputComponent->BindAction("RightClick", IE_Pressed, this, &AItem::AllowRotation);
-		this->InputComponent->BindAction("RightClick", IE_Released, this, &AItem::AllowRotation);
+		this->InputComponent->BindAction("RightClick", IE_Pressed, this, &AItem::ToggleRotation);
+		this->InputComponent->BindAction("RightClick", IE_Released, this, &AItem::ToggleRotation);
 
 		this->InputComponent->BindAxis("Turn", this, &AItem::Turn);
 		this->InputComponent->BindAxis("LookUp", this, &AItem::LookUp);
@@ -71,9 +71,10 @@ void AItem::LookUp(float Value)
 	}
 }
 
-void AItem::AllowRotation()
+void AItem::ToggleRotation()
 {
 	bIsRotating = !bIsRotating;
+	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("Item.cpp - %s"), bIsRotating ? TEXT("true") : TEXT("false")));
 }
 
 void AItem::Inspect(APlayerCharacter* Player)

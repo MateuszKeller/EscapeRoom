@@ -25,7 +25,11 @@ void APuzzlePartItem::BeginPlay()
 void APuzzlePartItem::OnClickedTake(AActor* TouchedActor, FKey ButtonPressed)
 {
 	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	Take(Player);
+	if (FVector::Distance(Player->GetActorLocation(), this->GetActorLocation()) < Player->TraceDistance)
+	{
+		Take(Player);
+	}
+	
 
 }
 

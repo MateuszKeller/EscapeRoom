@@ -36,7 +36,7 @@ protected:
 	UFUNCTION()
 	void LookUp(float Value);
 
-	void AllowRotation();
+	void ToggleRotation();
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

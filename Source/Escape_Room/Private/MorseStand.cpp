@@ -2,6 +2,8 @@
 
 
 #include "MorseStand.h"
+#include "Others.h"
+#include "PlayerCharacter.h"
 
 // Sets default values
 AMorseStand::AMorseStand()
@@ -67,28 +69,32 @@ bool AMorseStand::IsSolved()
 
 void AMorseStand::SendLetter(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("MorseStand.cpp - Click")));
-	if (FMath::IsNearlyEqual(TouchedComponent->GetRelativeLocation().X, 0.f, 0.001f))
+	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (Player->State == EPlayerCharacterState::Puzzle)
 	{
-		FString l = Letters[Cast<UStaticMeshComponent>(TouchedComponent)];
-		TouchedComponent->AddRelativeLocation(FVector(5.f, 0.f, 0.f));
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("MorseStand.cpp - %f %s"), TouchedComponent->GetRelativeLocation().X, *l));
-		Word.Append(Letters[Cast<UStaticMeshComponent>(TouchedComponent)]);	
+		if (FMath::IsNearlyEqual(TouchedComponent->GetRelativeLocation().X, 0.f, 0.01f))
+		{
+			FString l = Letters[Cast<UStaticMeshComponent>(TouchedComponent)];
+			TouchedComponent->AddRelativeLocation(FVector(5.f, 0.f, 0.f));
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("MorseStand.cpp - %f %s"), TouchedComponent->GetRelativeLocation().X, *l));
+			Word.Append(Letters[Cast<UStaticMeshComponent>(TouchedComponent)]);
 
-		if (IsSolved())
-		{
-			OnSolve();
-			bIsSolved = true;
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("*.cpp - Solved")));
-		}
-		else
-		{
-			if (Word.Len() == 6)
+			if (IsSolved())
 			{
-				Reset();
+				OnSolve();
+				bIsSolved = true;
+				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("*.cpp - Solved")));
+			}
+			else
+			{
+				if (Word.Len() == 6)
+				{
+					Reset();
+				}
 			}
 		}
 	}
+	
 }
 
 void AMorseStand::Reset()

@@ -2,6 +2,8 @@
 
 
 #include "Rods.h"
+#include "Others.h"
+#include "PlayerCharacter.h"
 
 // Sets default values
 ARods::ARods()
@@ -77,17 +79,22 @@ bool ARods::IsSolved()
 
 void ARods::ChangeColor(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed)
 {
-	int32 ColorNumber = Current[Cast<UStaticMeshComponent>(TouchedComponent)];
-	ColorNumber++;
-	ColorNumber %= Colors.Num();
-
-	Current.Add(Cast<UStaticMeshComponent>(TouchedComponent), ColorNumber);
-	ChangeMaterial(Cast<UStaticMeshComponent>(TouchedComponent), Colors[ColorNumber]);
-
-	if (IsSolved())
+	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (Player->State == EPlayerCharacterState::Puzzle)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("Rods.cpp - SOLVED")));
-		OnSolve();
-		bIsSolved = true;
+		int32 ColorNumber = Current[Cast<UStaticMeshComponent>(TouchedComponent)];
+		ColorNumber++;
+		ColorNumber %= Colors.Num();
+
+		Current.Add(Cast<UStaticMeshComponent>(TouchedComponent), ColorNumber);
+		ChangeMaterial(Cast<UStaticMeshComponent>(TouchedComponent), Colors[ColorNumber]);
+
+		if (IsSolved())
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("Rods.cpp - SOLVED")));
+			OnSolve();
+			bIsSolved = true;
+		}
 	}
+	
 }

@@ -52,5 +52,6 @@ void AInspectionItem::DropItem()
 	this->DisableInput(Controller);
 	Player->EnableInput(Controller);
 	Player->State = EPlayerCharacterState::None;
+	this->bIsRotating = false;
 
 }

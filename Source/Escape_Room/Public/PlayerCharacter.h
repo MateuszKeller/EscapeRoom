@@ -97,6 +97,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	float TraceDistance = 175.f;
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bHasEyepiece = false;
 };

@@ -15,14 +15,17 @@ struct FItemDetailStruct
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
 	FName ItemName = FName(*FString("Default Item"));
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Item")
 	UStaticMesh* ItemMesh = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
 	UTexture2D* ItemThumbnail = nullptr;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Item")
 	TSubclassOf<AInventoryItem> ItemClass = nullptr;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Item")
+	FTransform ItemTransform;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
 	FText Message = FText::FromString("[E] Take");
