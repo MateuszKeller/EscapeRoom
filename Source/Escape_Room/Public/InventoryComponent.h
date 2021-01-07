@@ -42,7 +42,7 @@ public:
 	TArray<FItemDetailStruct> Items;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	int32 SlotsAmount = 6;
+	int32 SlotsAmount = 8;
 
 	UPROPERTY(BlueprintReadWrite)
 	FItemDetailStruct CurrentlyUsedItem;

@@ -166,6 +166,7 @@ void APlayerCharacter::RemoveUsedItem()
 {
 	PlayerInventory->RemoveItem(PlayerInventory->CurrentlyUsedItem);
 	PlayerInventory->CurrentlyUsedItem = FItemDetailStruct();
+	OnMessageUpdate.Broadcast(FText::FromString(""));
 }
 
 void APlayerCharacter::Eyepiece()

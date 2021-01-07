@@ -50,7 +50,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Item")
 	class UCapsuleComponent* ItemInteractCollision;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Item")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item")
 	class UStaticMeshComponent* ItemMeshComponent;
 
 	//Does actor is rotating during inspection 
