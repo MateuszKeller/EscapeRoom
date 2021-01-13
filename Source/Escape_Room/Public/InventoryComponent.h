@@ -35,7 +35,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool RemoveItem(FItemDetailStruct ItemStruct);
 
-	UPROPERTY(BlueprintAssignable)
+	UFUNCTION(BlueprintCallable)
+	bool CompareToUsedItem(FItemDetailStruct ItemStruct);
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnInventoryUpdated OnInventoryUpdated;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

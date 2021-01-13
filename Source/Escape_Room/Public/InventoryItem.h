@@ -13,7 +13,7 @@ struct FItemDetailStruct
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
-	FName ItemName = FName(*FString("Default Item"));
+	FText ItemName = FText::FromString("Default Item");
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Item")
 	UStaticMesh* ItemMesh = nullptr;
@@ -31,7 +31,7 @@ struct FItemDetailStruct
 	FText Message = FText::FromString("[E] Take");
 
 	bool operator==(const FItemDetailStruct& other) const {
-		return ItemName == other.ItemName && ItemClass == other.ItemClass;
+		return ItemName.EqualTo(other.ItemName) && ItemClass == other.ItemClass;
 	}
 
 };
@@ -62,4 +62,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
 	FItemDetailStruct ItemDetails;
+	
+	UPROPERTY(BlueprintReadWrite, Category = "Item")
+	bool bInsideInventory = false;
 };

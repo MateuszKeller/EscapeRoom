@@ -47,3 +47,9 @@ bool UInventoryComponent::RemoveItem(FItemDetailStruct ItemStruct)
 
 	return true;
 }
+
+bool UInventoryComponent::CompareToUsedItem(FItemDetailStruct ItemStruct)
+{
+	if (CurrentlyUsedItem == FItemDetailStruct())return false;
+	return CurrentlyUsedItem == ItemStruct;
+}

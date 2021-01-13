@@ -91,11 +91,11 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	AItem* HoldItem = nullptr;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USceneComponent* ItemGrip;
 	
 	UPROPERTY(EditAnywhere)
-	float TraceDistance = 175.f;
+	float TraceDistance = 180.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bHasEyepiece = false;

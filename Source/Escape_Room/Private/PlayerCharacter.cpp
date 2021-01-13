@@ -23,6 +23,7 @@ APlayerCharacter::APlayerCharacter()
 	ItemGrip->SetupAttachment(PlayerCamera);
 
 	PlayerInventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("PlayerInventory"));
+
 }
 
 // Called when the game starts or when spawned

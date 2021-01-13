@@ -47,8 +47,8 @@ void AAdvancedPuzzle::SetupPlayerInputComponent()
 
 	if (this->InputComponent)
 	{
-		this->InputComponent->BindAction("RightClick", IE_Pressed, this, &AAdvancedPuzzle::ToggleRotation);
-		this->InputComponent->BindAction("RightClick", IE_Released, this, &AAdvancedPuzzle::ToggleRotation);
+		this->InputComponent->BindAction("Rotate", IE_Pressed, this, &AAdvancedPuzzle::ToggleRotation);
+		this->InputComponent->BindAction("Rotate", IE_Released, this, &AAdvancedPuzzle::ToggleRotation);
 
 		this->InputComponent->BindAxis("Turn", this, &AAdvancedPuzzle::Turn);
 		this->InputComponent->BindAxis("LookUp", this, &AAdvancedPuzzle::LookUp);

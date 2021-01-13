@@ -24,19 +24,23 @@ void APuzzlePartItem::BeginPlay()
 
 void APuzzlePartItem::OnClickedTake(AActor* TouchedActor, FKey ButtonPressed)
 {
-	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (FVector::Distance(Player->GetActorLocation(), this->GetActorLocation()) < Player->TraceDistance)
+	if (!bInsideInventory)
 	{
-		Take(Player);
+		APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		if (FVector::Distance(Player->GetActorLocation(), this->GetActorLocation()) < Player->TraceDistance)
+		{
+			Take(Player);
+		}
 	}
-	
-
 }
 
 void APuzzlePartItem::OnStartHover(AActor* TouchedActor)
 {
-	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	Player->OnMessageUpdate.Broadcast(FText::FromString("[E] Take"));
+	if (!bInsideInventory)
+	{
+		APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		Player->OnMessageUpdate.Broadcast(ItemDetails.Message);
+	}
 }
 
 void APuzzlePartItem::OnEndHover(AActor* TouchedActor)

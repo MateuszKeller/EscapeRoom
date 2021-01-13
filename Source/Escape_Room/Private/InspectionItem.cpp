@@ -37,8 +37,22 @@ void AInspectionItem::DropItem()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Hehe I'm free!"));
 
-	FDetachmentTransformRules rules = FDetachmentTransformRules(EDetachmentRule::KeepWorld, true);
-	DetachFromActor(rules);
+	
+	//DetachFromActor(rules);
+	
+	//FVector GripReset = ItemMeshComponent->GetRelativeLocation(); 
+	//FVector GripReset = ItemMeshComponent->GetComponentLocation();
+
+	//GripReset.Z *= -1;
+	//GripPoint->SetRelativeLocation(GripReset);
+	//GripPoint->SetWorldLocation(GripReset);
+	//GripPoint->SetRelativeRotation(FRotator(0.f));
+
+	FDetachmentTransformRules rules = FDetachmentTransformRules(EDetachmentRule::KeepRelative, true);
+	//FDetachmentTransformRules rules = FDetachmentTransformRules(EDetachmentRule::KeepWorld, true);
+	GripPoint->DetachFromComponent(rules);
+	GripPoint->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, false));
+		
 	this->SetActorTransform(ItemWorldPosition);
 	this->SetActorEnableCollision(true);
 	//ItemMesh->SetSimulatePhysics(true);

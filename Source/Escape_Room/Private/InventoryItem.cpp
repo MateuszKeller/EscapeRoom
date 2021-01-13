@@ -3,6 +3,7 @@
 
 #include "InventoryItem.h"
 #include "PlayerCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -42,4 +43,11 @@ void AInventoryItem::Take(APlayerCharacter* Player)
 void AInventoryItem::DropItem()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Go back to the Shadow!"));
+	Destroy();
+	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	APlayerController* Controller = GetWorld()->GetFirstPlayerController();
+	Player->HoldItem = nullptr;
+	this->DisableInput(Controller);
+	Player->EnableInput(Controller);
+	Player->State = EPlayerCharacterState::None;
 }

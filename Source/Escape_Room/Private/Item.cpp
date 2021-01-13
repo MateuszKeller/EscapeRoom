@@ -14,12 +14,11 @@ AItem::AItem()
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 
-	ItemInteractCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Interaction Capsule"));
-	ItemInteractCollision->InitCapsuleSize(32.f, 32.f);
-	ItemInteractCollision->SetupAttachment(RootComponent);
+	GripPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Grip Point"));
+	GripPoint->SetupAttachment(RootComponent);
 
 	ItemMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Item Mesh"));
-	ItemMeshComponent->SetupAttachment(RootComponent);
+	ItemMeshComponent->SetupAttachment(GripPoint);
 }
 
 // Called when the game starts or when spawned
@@ -43,8 +42,8 @@ void AItem::SetupPlayerInputComponent()
 	if (this->InputComponent)
 	{
 		this->InputComponent->BindAction("Interact", IE_Pressed, this, &AItem::DropItem);
-		this->InputComponent->BindAction("RightClick", IE_Pressed, this, &AItem::ToggleRotation);
-		this->InputComponent->BindAction("RightClick", IE_Released, this, &AItem::ToggleRotation);
+		this->InputComponent->BindAction("Rotate", IE_Pressed, this, &AItem::RotationOn);
+		this->InputComponent->BindAction("Rotate", IE_Released, this, &AItem::RotationOff);
 
 		this->InputComponent->BindAxis("Turn", this, &AItem::Turn);
 		this->InputComponent->BindAxis("LookUp", this, &AItem::LookUp);
@@ -55,19 +54,21 @@ void AItem::SetupPlayerInputComponent()
 
 void AItem::Turn(float Value)
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Turn"));
 	if (bIsRotating)
 	{
-		RootComponent->AddLocalRotation(FRotator(0, Value * 3.0, 0));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Turn"));
+		GripPoint->AddLocalRotation(FRotator(0.0f, Value * RotationMultiplier, 0.0f));
+		//RootComponent->AddLocalRotation(FRotator(0, Value * RotationMultiplier, 0));
 	}
 }
 
 void AItem::LookUp(float Value)
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("LookUp"));
 	if (bIsRotating)
 	{
-		RootComponent->AddLocalRotation(FRotator(Value * 3.0, 0, 0));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("LookUp"));
+		PlayerGrip->AddLocalRotation(FRotator(Value * RotationMultiplier, 0.0f, 0.0f));
+
 	}
 }
 
@@ -77,14 +78,22 @@ void AItem::ToggleRotation()
 	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("Item.cpp - %s"), bIsRotating ? TEXT("true") : TEXT("false")));
 }
 
+void AItem::RotationOn() { bIsRotating = true; }
+void AItem::RotationOff() { bIsRotating = false; }
+
 void AItem::Inspect(APlayerCharacter* Player)
 {
+	bIsRotating = false;
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Inspection?!"));
-	ItemMeshComponent->SetSimulatePhysics(false);
-	this->SetActorEnableCollision(false);
+	//ItemMeshComponent->SetSimulatePhysics(false);
+	//this->SetActorEnableCollision(false);
 
-	FAttachmentTransformRules rules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepRelative, true);
-	AttachToComponent(Player->ItemGrip, rules);
+	FAttachmentTransformRules rules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, EAttachmentRule::SnapToTarget, false);
+	PlayerGrip = Player->ItemGrip;
+	PlayerGrip->SetRelativeLocation(GripLocation);
+	GripPoint->AttachToComponent(Player->ItemGrip, rules);
+	//AttachToComponent(Player->ItemGrip, rules);
+
 	//InteractCollision->SetSimulatePhysics(false);
 	
 	APlayerController* Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
@@ -101,5 +110,5 @@ void AItem::Inspect(APlayerCharacter* Player)
 
 void AItem::DropItem()
 {
-
+	PlayerGrip = nullptr;
 }

@@ -19,11 +19,17 @@ void APickupItem::BeginPlay()
 
 void APickupItem::OnLookAt_Implementation(APlayerCharacter* Player)
 {
-	Player->OnMessageUpdate.Broadcast(ItemDetails.Message);
+	if (!bInsideInventory)
+	{
+		Player->OnMessageUpdate.Broadcast(ItemDetails.Message);
+	}
 }
 
 void APickupItem::OnInteract_Implementation(APlayerCharacter* Player)
 {
-	Player->OnMessageUpdate.Broadcast(FText::FromString(""));
-	Take(Player);
+	if (!bInsideInventory)
+	{
+		Player->OnMessageUpdate.Broadcast(FText::FromString(""));
+		Take(Player);
+	}
 }

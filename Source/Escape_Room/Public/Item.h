@@ -38,6 +38,9 @@ protected:
 
 	void ToggleRotation();
 
+	void RotationOn();
+	void RotationOff();
+
 
 	UFUNCTION(BlueprintCallable)
 	void Inspect(APlayerCharacter* Player);
@@ -48,13 +51,23 @@ protected:
 public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Item")
-	class UCapsuleComponent* ItemInteractCollision;
+	USceneComponent* GripPoint;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Item")
+	USceneComponent* PlayerGrip;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item")
+	FVector GripLocation = FVector(150.f, 0, 0);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item")
 	class UStaticMeshComponent* ItemMeshComponent;
 
 	//Does actor is rotating during inspection 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, Category = "Item")
 	bool bIsRotating = false;
-
+	
+	//How fast item will rotate
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item")
+	float RotationMultiplier = 0.5;
+		
 };
