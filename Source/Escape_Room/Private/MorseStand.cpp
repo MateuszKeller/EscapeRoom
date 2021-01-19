@@ -42,11 +42,28 @@ void AMorseStand::BeginPlay()
 	Super::BeginPlay();
 
 	Button_0->OnClicked.AddDynamic(this, &AMorseStand::SendLetter);
+	Button_0->OnBeginCursorOver.AddDynamic(this, &AMorseStand::OnStartHover);
+	Button_0->OnEndCursorOver.AddDynamic(this, &AMorseStand::OnEndHover);
+
 	Button_1->OnClicked.AddDynamic(this, &AMorseStand::SendLetter);
+	Button_1->OnBeginCursorOver.AddDynamic(this, &AMorseStand::OnStartHover);
+	Button_1->OnEndCursorOver.AddDynamic(this, &AMorseStand::OnEndHover);
+
 	Button_2->OnClicked.AddDynamic(this, &AMorseStand::SendLetter);
+	Button_2->OnBeginCursorOver.AddDynamic(this, &AMorseStand::OnStartHover);
+	Button_2->OnEndCursorOver.AddDynamic(this, &AMorseStand::OnEndHover);
+
 	Button_3->OnClicked.AddDynamic(this, &AMorseStand::SendLetter);
+	Button_3->OnBeginCursorOver.AddDynamic(this, &AMorseStand::OnStartHover);
+	Button_3->OnEndCursorOver.AddDynamic(this, &AMorseStand::OnEndHover);
+
 	Button_4->OnClicked.AddDynamic(this, &AMorseStand::SendLetter);
+	Button_4->OnBeginCursorOver.AddDynamic(this, &AMorseStand::OnStartHover);
+	Button_4->OnEndCursorOver.AddDynamic(this, &AMorseStand::OnEndHover);
+
 	Button_5->OnClicked.AddDynamic(this, &AMorseStand::SendLetter);
+	Button_5->OnBeginCursorOver.AddDynamic(this, &AMorseStand::OnStartHover);
+	Button_5->OnEndCursorOver.AddDynamic(this, &AMorseStand::OnEndHover);
 
 }
 
@@ -94,7 +111,6 @@ void AMorseStand::SendLetter(UPrimitiveComponent* TouchedComponent, FKey ButtonP
 			}
 		}
 	}
-	
 }
 
 void AMorseStand::Reset()

@@ -79,7 +79,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* PlayerCamera;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	EPlayerCharacterState State = EPlayerCharacterState::None;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

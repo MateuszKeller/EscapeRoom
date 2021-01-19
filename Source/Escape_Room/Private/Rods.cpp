@@ -50,10 +50,24 @@ void ARods::BeginPlay()
 	Super::BeginPlay();
 	
 	Rod_0->OnClicked.AddDynamic(this, &ARods::ChangeColor);
+	Rod_0->OnBeginCursorOver.AddDynamic(this, &ARods::OnStartHover);
+	Rod_0->OnEndCursorOver.AddDynamic(this, &ARods::OnEndHover);
+
 	Rod_1->OnClicked.AddDynamic(this, &ARods::ChangeColor);
+	Rod_1->OnBeginCursorOver.AddDynamic(this, &ARods::OnStartHover);
+	Rod_1->OnEndCursorOver.AddDynamic(this, &ARods::OnEndHover);
+
 	Rod_2->OnClicked.AddDynamic(this, &ARods::ChangeColor);
+	Rod_2->OnBeginCursorOver.AddDynamic(this, &ARods::OnStartHover);
+	Rod_2->OnEndCursorOver.AddDynamic(this, &ARods::OnEndHover);
+
 	Rod_3->OnClicked.AddDynamic(this, &ARods::ChangeColor);
+	Rod_3->OnBeginCursorOver.AddDynamic(this, &ARods::OnStartHover);
+	Rod_3->OnEndCursorOver.AddDynamic(this, &ARods::OnEndHover);
+
 	Rod_4->OnClicked.AddDynamic(this, &ARods::ChangeColor);
+	Rod_4->OnBeginCursorOver.AddDynamic(this, &ARods::OnStartHover);
+	Rod_4->OnEndCursorOver.AddDynamic(this, &ARods::OnEndHover);
 }
 
 // Called every frame

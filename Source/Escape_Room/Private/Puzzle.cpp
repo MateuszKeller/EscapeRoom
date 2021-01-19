@@ -82,6 +82,22 @@ void APuzzle::OnInteract_Implementation(APlayerCharacter* Player)
 	}
 }
 
+void APuzzle::OnStartHover(UPrimitiveComponent* TouchedComponent)
+{
+	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (Player->State == EPlayerCharacterState::Puzzle)
+	{
+		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		PlayerController->CurrentMouseCursor = EMouseCursor::Hand;
+	}
+}
+
+void APuzzle::OnEndHover(UPrimitiveComponent* TouchedComponent)
+{
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PlayerController->CurrentMouseCursor = EMouseCursor::Default;
+}
+
 void APuzzle::ChangeView()
 {
 	APlayerController* Controller = GetWorld()->GetFirstPlayerController();
@@ -95,7 +111,6 @@ void APuzzle::ChangeView()
 		From = Cast<AActor>(Player);
 		From->SetActorTickEnabled(false);
 		To = Cast<AActor>(this);
-
 		
 		Controller->bShowMouseCursor = true;
 		FInputModeGameAndUI InputMode = FInputModeGameAndUI();

@@ -44,6 +44,11 @@ protected:
 	void OnInteract(APlayerCharacter* Player);
 	virtual void OnInteract_Implementation(APlayerCharacter* Player);
 
+	UFUNCTION()
+	void OnStartHover(UPrimitiveComponent* TouchedComponent);
+	UFUNCTION()
+	void OnEndHover(UPrimitiveComponent* TouchedComponent);
+
 
 	// Changes view from player to puzzle and vice versa
 	UFUNCTION(BlueprintCallable)

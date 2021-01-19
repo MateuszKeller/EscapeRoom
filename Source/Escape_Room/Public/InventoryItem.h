@@ -57,8 +57,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Take(APlayerCharacter* Player);
 
+	UFUNCTION(BlueprintCallable)
+	void InspectFromInventory();
+
 	void DropItem();
 
+	UFUNCTION(BlueprintCallable)
+	bool IsNotWalking();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
 	FItemDetailStruct ItemDetails;

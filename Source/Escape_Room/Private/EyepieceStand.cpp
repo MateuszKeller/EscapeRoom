@@ -44,9 +44,20 @@ void AEyepieceStand::BeginPlay()
 	Super::BeginPlay();
 	
 	Part_0->OnClicked.AddDynamic(this, &AEyepieceStand::RotatePart);
+	Part_0->OnBeginCursorOver.AddDynamic(this, &AEyepieceStand::OnStartHover);
+	Part_0->OnEndCursorOver.AddDynamic(this, &AEyepieceStand::OnEndHover);
+
 	Part_1->OnClicked.AddDynamic(this, &AEyepieceStand::RotatePart);
+	Part_1->OnBeginCursorOver.AddDynamic(this, &AEyepieceStand::OnStartHover);
+	Part_1->OnEndCursorOver.AddDynamic(this, &AEyepieceStand::OnEndHover);
+	
 	Part_2->OnClicked.AddDynamic(this, &AEyepieceStand::RotatePart);
+	Part_2->OnBeginCursorOver.AddDynamic(this, &AEyepieceStand::OnStartHover);
+	Part_2->OnEndCursorOver.AddDynamic(this, &AEyepieceStand::OnEndHover);
+
 	Part_3->OnClicked.AddDynamic(this, &AEyepieceStand::RotatePart);
+	Part_3->OnBeginCursorOver.AddDynamic(this, &AEyepieceStand::OnStartHover);
+	Part_3->OnEndCursorOver.AddDynamic(this, &AEyepieceStand::OnEndHover);
 
 	Current.Add(Part_0, Part_0->GetRelativeRotation());
 	Current.Add(Part_1, Part_1->GetRelativeRotation());
