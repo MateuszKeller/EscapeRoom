@@ -88,6 +88,8 @@ public:
 
 	AActor* LookAtActor = nullptr;
 
+	IInteractable* LastInteractable = nullptr;
+
 	UPROPERTY(BlueprintReadWrite)
 	AItem* HoldItem = nullptr;
 
@@ -99,4 +101,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bHasEyepiece = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bShowOutline = false;
 };

@@ -21,15 +21,24 @@ void APickupItem::OnLookAt_Implementation(APlayerCharacter* Player)
 {
 	if (!bInsideInventory)
 	{
-		Player->OnMessageUpdate.Broadcast(ItemDetails.Message);
+		if (Player->bShowOutline)
+		{
+			ItemMeshComponent->SetRenderCustomDepth(true);
+		}
+		else
+		{
+			Player->OnMessageUpdate.Broadcast(ItemDetails.Message);
+		}
 	}
 }
 
 void APickupItem::OnInteract_Implementation(APlayerCharacter* Player)
 {
-	if (!bInsideInventory)
-	{
-		Player->OnMessageUpdate.Broadcast(FText::FromString(""));
-		Take(Player);
-	}
+	Player->OnMessageUpdate.Broadcast(FText::FromString(""));
+	Take(Player);
+}
+
+void APickupItem::OnStopLooking_Implementation()
+{
+	ItemMeshComponent->SetRenderCustomDepth(false);
 }

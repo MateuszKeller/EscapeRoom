@@ -40,7 +40,17 @@ void APlayerCharacter::Tick(float DeltaTime)
 	APlayerController* Controll = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (!CheckLookAt() && !Controll->bShowMouseCursor)
 	{
-		OnMessageUpdate.Broadcast(FText::FromString(""));
+		if (bShowOutline && LastInteractable)
+		{
+			LastInteractable->Execute_OnStopLooking(LookAtActor);
+		}
+		else
+		{
+			OnMessageUpdate.Broadcast(FText::FromString(""));
+		}
+		
+		LastInteractable = nullptr;
+		LookAtActor = nullptr;
 	}
 }
 
@@ -136,7 +146,7 @@ AActor* APlayerCharacter::CheckLookAt()
 	FVector End = CameraLocation + (CameraRotation.Vector() * TraceDistance);
 
 	FCollisionQueryParams Params;
-	GetWorld()->LineTraceSingleByChannel(Hit, CameraLocation, End, ECC_Visibility, Params);
+	GetWorld()->LineTraceSingleByChannel(Hit, CameraLocation, End, ECC_Camera, Params);
 	
 	AActor* HitActor = Hit.GetActor();
 	if (IsValid(HitActor))
@@ -148,17 +158,24 @@ AActor* APlayerCharacter::CheckLookAt()
 			if (LookAtActor != HitActor)
 			{
 				LookAtActor = HitActor;
+				LastInteractable = Cast<IInteractable>(LookAtActor);
 				Interface->Execute_OnLookAt(LookAtActor, this);
+				return LookAtActor;
+				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, TEXT("LookAtActor != HitActor"));
 			}
 		}
 		else
 		{
-			LookAtActor = nullptr;
+			return nullptr;
+			//LookAtActor = nullptr;
+			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, TEXT("!bInteractable"));
 		}
 	}
 	else
 	{
-		LookAtActor = nullptr;
+		return nullptr;
+		//LookAtActor = nullptr;
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, TEXT("IsNotValid(HitActor)"));
 	}
 	return LookAtActor;
 }

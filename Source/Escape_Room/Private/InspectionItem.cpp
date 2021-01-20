@@ -24,13 +24,25 @@ void AInspectionItem::BeginPlay()
 
 void AInspectionItem::OnLookAt_Implementation(APlayerCharacter* Player)
 {
+	if (Player->bShowOutline)
+	{
+		ItemMeshComponent->SetRenderCustomDepth(true);
+	}
+	else
+	{
 	Player->OnMessageUpdate.Broadcast(Message);
+	}
 }
 
 void AInspectionItem::OnInteract_Implementation(APlayerCharacter* Player)
 {
 	Player->OnMessageUpdate.Broadcast(FText::FromString(""));
 	this->Inspect(Player);
+}
+
+void AInspectionItem::OnStopLooking_Implementation()
+{
+	ItemMeshComponent->SetRenderCustomDepth(false);
 }
 
 void AInspectionItem::DropItem()
@@ -52,9 +64,9 @@ void AInspectionItem::DropItem()
 	//FDetachmentTransformRules rules = FDetachmentTransformRules(EDetachmentRule::KeepWorld, true);
 	GripPoint->DetachFromComponent(rules);
 	GripPoint->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, false));
-		
 	this->SetActorTransform(ItemWorldPosition);
 	this->SetActorEnableCollision(true);
+	GripPoint->SetRelativeLocation(ItemMeshComponent->GetRelativeLocation() * -1);
 	//ItemMesh->SetSimulatePhysics(true);
 
 	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));

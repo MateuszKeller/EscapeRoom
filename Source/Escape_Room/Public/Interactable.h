@@ -34,4 +34,8 @@ public:
 	//Event function when player tries to interact with something
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
 	void OnInteract(APlayerCharacter* Player);
+	
+	//Event function when player stop looking on something 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	void OnStopLooking();
 };

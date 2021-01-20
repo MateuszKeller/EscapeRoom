@@ -69,8 +69,17 @@ void APuzzle::SetupPlayerInputComponent()
 
 void APuzzle::OnLookAt_Implementation(APlayerCharacter* Player)
 {
-	if(!bIsSolved)
-		Player->OnMessageUpdate.Broadcast(Message);
+	if (!bIsSolved)
+	{
+		if (Player->bShowOutline)
+		{
+			PuzzleMesh->SetRenderCustomDepth(true);
+		}
+		else
+		{
+			Player->OnMessageUpdate.Broadcast(Message);
+		}
+	}
 }
 
 void APuzzle::OnInteract_Implementation(APlayerCharacter* Player)
@@ -80,6 +89,11 @@ void APuzzle::OnInteract_Implementation(APlayerCharacter* Player)
 		Player->OnMessageUpdate.Broadcast(FText::FromString(""));
 		ChangeView();
 	}
+}
+
+void APuzzle::OnStopLooking_Implementation()
+{
+	PuzzleMesh->SetRenderCustomDepth(false);
 }
 
 void APuzzle::OnStartHover(UPrimitiveComponent* TouchedComponent)

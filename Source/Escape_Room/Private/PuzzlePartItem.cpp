@@ -37,6 +37,7 @@ void APuzzlePartItem::OnStartHover(AActor* TouchedActor)
 	{
 		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 		PlayerController->CurrentMouseCursor = EMouseCursor::Hand;
+		ItemMeshComponent->SetRenderCustomDepth(true);
 		
 		//APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 		//Player->OnMessageUpdate.Broadcast(ItemDetails.Message);
@@ -47,6 +48,7 @@ void APuzzlePartItem::OnEndHover(AActor* TouchedActor)
 {
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	PlayerController->CurrentMouseCursor = EMouseCursor::Default;
+	ItemMeshComponent->SetRenderCustomDepth(false);
 	//APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	//Player->OnMessageUpdate.Broadcast(FText::FromString(""));
 }

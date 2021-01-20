@@ -43,6 +43,10 @@ protected:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
 	void OnInteract(APlayerCharacter* Player);
 	virtual void OnInteract_Implementation(APlayerCharacter* Player);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	void OnStopLooking();
+	virtual void OnStopLooking_Implementation();
 
 	UFUNCTION()
 	void OnStartHover(UPrimitiveComponent* TouchedComponent);
