@@ -191,6 +191,6 @@ void APlayerCharacter::Eyepiece()
 {
 	if (bHasEyepiece)
 	{
-		OnEyepieceUsed.Broadcast();
+		//OnEyepieceUsed.Broadcast();
 	}
 }
