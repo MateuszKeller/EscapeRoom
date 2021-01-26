@@ -19,6 +19,10 @@ APlayerCharacter::APlayerCharacter()
 	PlayerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	PlayerCamera->SetupAttachment(RootComponent);
 
+	EyepiceVision = CreateDefaultSubobject<UPostProcessComponent>(TEXT("EyepieceVision"));
+	EyepiceVision->SetupAttachment(PlayerCamera);
+	EyepiceVision->bEnabled = false;
+
 	ItemGrip = CreateDefaultSubobject<USceneComponent>(TEXT("ItemGrip"));
 	ItemGrip->SetupAttachment(PlayerCamera);
 
@@ -189,8 +193,10 @@ void APlayerCharacter::RemoveUsedItem()
 
 void APlayerCharacter::Eyepiece()
 {
+	bool bEnabled = EyepiceVision->bEnabled;
 	if (bHasEyepiece)
 	{
-		//OnEyepieceUsed.Broadcast();
+		EyepiceVision->bEnabled = !bEnabled;
+		OnEyepieceUsed.Broadcast();
 	}
 }

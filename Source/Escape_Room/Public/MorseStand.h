@@ -33,6 +33,12 @@ public:
 
 	UFUNCTION()
 	void Reset();
+	
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	virtual void OnLookAt_Implementation(APlayerCharacter* Player) override;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bHasStoppedPlaying = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<UStaticMeshComponent*, FString> Letters;

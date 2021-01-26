@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SceneComponent.h"
+#include "Components/PostProcessComponent.h"
 #include "InventoryComponent.h"
 #include "Others.h"
 #include "PlayerCharacter.generated.h"
@@ -78,6 +79,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* PlayerCamera;
+
+	UPROPERTY(EditAnywhere)
+	UPostProcessComponent* EyepiceVision;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	EPlayerCharacterState State = EPlayerCharacterState::None;

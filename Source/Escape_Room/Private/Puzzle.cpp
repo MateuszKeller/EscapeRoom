@@ -86,7 +86,14 @@ void APuzzle::OnInteract_Implementation(APlayerCharacter* Player)
 {
 	if(!bIsSolved)
 	{
-		Player->OnMessageUpdate.Broadcast(FText::FromString(""));
+		if (Player->bShowOutline)
+		{
+			OnStopLooking();
+		}
+		else
+		{
+			Player->OnMessageUpdate.Broadcast(FText::FromString(""));
+		}
 		ChangeView();
 	}
 }

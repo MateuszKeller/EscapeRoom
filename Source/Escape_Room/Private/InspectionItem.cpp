@@ -36,8 +36,15 @@ void AInspectionItem::OnLookAt_Implementation(APlayerCharacter* Player)
 
 void AInspectionItem::OnInteract_Implementation(APlayerCharacter* Player)
 {
-	Player->OnMessageUpdate.Broadcast(FText::FromString(""));
 	this->Inspect(Player);
+	if (Player->bShowOutline)
+	{
+		OnStopLooking();
+	}
+	else
+	{
+		Player->OnMessageUpdate.Broadcast(FText::FromString(""));
+	}
 }
 
 void AInspectionItem::OnStopLooking_Implementation()

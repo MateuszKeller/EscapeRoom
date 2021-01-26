@@ -27,6 +27,8 @@ void APuzzlePartItem::OnClickedTake(AActor* TouchedActor, FKey ButtonPressed)
 	if (!bInsideInventory && IsNotWalking())
 	{
 		APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		PlayerController->CurrentMouseCursor = EMouseCursor::Default;
 		Take(Player);
 	}
 }
