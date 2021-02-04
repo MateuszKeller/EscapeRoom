@@ -76,7 +76,7 @@ void ARods::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-bool ARods::IsSolved()
+bool ARods::IsSolved_Implementation()
 {
 	for (auto Elem : Solution)
 	{

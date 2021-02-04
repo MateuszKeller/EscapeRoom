@@ -25,7 +25,7 @@ protected:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual bool IsSolved() override;
+	virtual bool IsSolved_Implementation() override;
 
 public:
 	UFUNCTION()

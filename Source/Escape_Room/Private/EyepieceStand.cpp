@@ -72,7 +72,7 @@ void AEyepieceStand::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-bool AEyepieceStand::IsSolved()
+bool AEyepieceStand::IsSolved_Implementation()
 {
 	for (auto Elem : Solution)
 	{

@@ -106,6 +106,7 @@ void AItem::Inspect(APlayerCharacter* Player)
 	Player->DisableInput(Controller);
 	this->EnableInput(Controller);
 	Player->State = EPlayerCharacterState::Inspection;
+	ItemMeshComponent->SetRenderCustomDepth(false);
 }
 
 void AItem::DropItem()

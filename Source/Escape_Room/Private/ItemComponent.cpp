@@ -37,14 +37,17 @@ void UItemComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 void UItemComponent::CheckUsedItem()
 {
 	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	auto Item = Player->PlayerInventory->CurrentlyUsedItem;
 	//bool bIsCorrectItem = (KeyItemClass == Player->PlayerInventory->CurrentlyUsedItem.ItemClass ? true : false);
 		
 	for (auto KeyItemClass : KeyItemClasses)
 	{
-		if (KeyItemClass == Player->PlayerInventory->CurrentlyUsedItem.ItemClass)
+		if (KeyItemClass == Item.ItemClass)
 		{
-			DummyMesh = Player->PlayerInventory->CurrentlyUsedItem.ItemMesh;
-			Scale = Player->PlayerInventory->CurrentlyUsedItem.ItemTransform.GetScale3D();
+			ItemClass = Item.ItemClass;
+			DummyMesh = Item.ItemMesh;
+			Scale = Item.ItemTransform.GetScale3D();
+			ItemName = Item.ItemName;
 			Cast<APuzzlePart>(GetOwner())->Solve();
 			Player->RemoveUsedItem();
 			return;

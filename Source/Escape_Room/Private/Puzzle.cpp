@@ -161,7 +161,7 @@ void APuzzle::ChangeView()
 	To->EnableInput(Controller);
 }
 
-bool APuzzle::IsSolved()
+bool APuzzle::IsSolved_Implementation()
 {
 	return bIsSolved;
 }

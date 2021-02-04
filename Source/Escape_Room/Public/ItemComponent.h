@@ -32,8 +32,14 @@ public:
 	TArray<TSubclassOf<AInventoryItem>> KeyItemClasses;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	TSubclassOf<AInventoryItem> ItemClass = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
 	UStaticMesh* DummyMesh = nullptr;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Item")
 	FVector Scale;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	FText ItemName;
 };

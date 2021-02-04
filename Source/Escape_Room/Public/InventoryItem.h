@@ -21,7 +21,7 @@ struct FItemDetailStruct
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
 	UTexture2D* ItemThumbnail = nullptr;
 
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Item")
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite, Category = "Item")
 	TSubclassOf<AInventoryItem> ItemClass = nullptr;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Item")
@@ -65,7 +65,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsNotWalking();
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
 	FItemDetailStruct ItemDetails;
 	
 	UPROPERTY(BlueprintReadWrite, Category = "Item")

@@ -59,8 +59,9 @@ protected:
 	void ChangeView();
 
 	//
-	UFUNCTION(BlueprintCallable)
-	virtual bool IsSolved();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	bool IsSolved();
+	virtual bool IsSolved_Implementation();
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Interaction")
 	void OnSolve();

@@ -73,7 +73,7 @@ void AMorseStand::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-bool AMorseStand::IsSolved()
+bool AMorseStand::IsSolved_Implementation()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("MorseStand.cpp - Word:%s"), *Word));
 	if (Word == Solution)

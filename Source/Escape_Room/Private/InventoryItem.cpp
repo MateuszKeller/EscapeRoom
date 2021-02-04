@@ -17,7 +17,10 @@ void AInventoryItem::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ItemDetails.ItemClass = this->GetClass();
+	if (!ItemDetails.ItemClass)
+	{
+		ItemDetails.ItemClass = this->GetClass();
+	}
 	ItemDetails.ItemMesh = ItemMeshComponent->GetStaticMesh();
 	ItemDetails.ItemTransform = ItemMeshComponent->GetRelativeTransform();
 }
