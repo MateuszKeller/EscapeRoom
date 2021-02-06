@@ -166,6 +166,7 @@ bool APuzzle::IsSolved_Implementation()
 	return bIsSolved;
 }
 
+
 //void APuzzle::TryToSolve()
 //{
 //	for (APuzzlePart* Part : PuzzleParts)
