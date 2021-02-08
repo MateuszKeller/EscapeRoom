@@ -50,5 +50,6 @@ public:
 	UPROPERTY(VisibleInstanceOnly, Category = "Item")
 	FTransform ItemWorldPosition;
 
-	
+	UPROPERTY(VisibleInstanceOnly, Category = "Item")
+	FVector GripPointPosition;	
 };

@@ -34,7 +34,7 @@ void UItemComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// ...
 }
 
-void UItemComponent::CheckUsedItem()
+bool UItemComponent::CheckUsedItem()
 {
 	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	auto Item = Player->PlayerInventory->CurrentlyUsedItem;
@@ -48,13 +48,19 @@ void UItemComponent::CheckUsedItem()
 			DummyMesh = Item.ItemMesh;
 			Scale = Item.ItemTransform.GetScale3D();
 			ItemName = Item.ItemName;
-			Cast<APuzzlePart>(GetOwner())->Solve();
+
+			if (Cast<APuzzlePart>(GetOwner()))
+			{
+				Cast<APuzzlePart>(GetOwner())->Solve();
+			}
+			
 			Player->RemoveUsedItem();
-			return;
+			return true;
 		}
 		
 	}
 	
 	Player->OnMessageUpdate.Broadcast(FText::FromString("You Picked The Wrong House Foul"));
+	return false;
 }
 

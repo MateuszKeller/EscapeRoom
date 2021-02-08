@@ -64,9 +64,10 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	AActor* CheckLookAt();
 
-	void Eyepiece();
-
 public:
+
+	UFUNCTION(BlueprintCallable)
+	void Eyepiece();
 
 	UFUNCTION(BlueprintCallable)
 	void RemoveUsedItem();
@@ -105,7 +106,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bHasEyepiece = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bShowOutline = false;
 };

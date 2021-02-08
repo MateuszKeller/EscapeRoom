@@ -11,6 +11,8 @@ AInspectionItem::AInspectionItem()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	ItemMeshComponent->SetCustomDepthStencilValue(1);
 }
 
 // Called when the game starts or when spawned
@@ -19,32 +21,22 @@ void AInspectionItem::BeginPlay()
 	Super::BeginPlay();
 
 	ItemWorldPosition = this->GetActorTransform();
+	GripPointPosition = this->GripPoint->GetRelativeLocation();
 }
 
 
 void AInspectionItem::OnLookAt_Implementation(APlayerCharacter* Player)
 {
-	if (Player->bShowOutline)
-	{
-		ItemMeshComponent->SetRenderCustomDepth(true);
-	}
-	else
-	{
+	ItemMeshComponent->SetRenderCustomDepth(true);
 	Player->OnMessageUpdate.Broadcast(Message);
-	}
 }
 
 void AInspectionItem::OnInteract_Implementation(APlayerCharacter* Player)
 {
+	OnStopLooking();
+	Player->OnMessageUpdate.Broadcast(FText::FromString(""));
+
 	this->Inspect(Player);
-	if (Player->bShowOutline)
-	{
-		OnStopLooking();
-	}
-	else
-	{
-		Player->OnMessageUpdate.Broadcast(FText::FromString(""));
-	}
 }
 
 void AInspectionItem::OnStopLooking_Implementation()
@@ -73,7 +65,8 @@ void AInspectionItem::DropItem()
 	GripPoint->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, false));
 	this->SetActorTransform(ItemWorldPosition);
 	this->SetActorEnableCollision(true);
-	GripPoint->SetRelativeLocation(ItemMeshComponent->GetRelativeLocation() * -1);
+	GripPoint->SetRelativeLocation(GripPointPosition);
+
 	//ItemMesh->SetSimulatePhysics(true);
 
 	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));

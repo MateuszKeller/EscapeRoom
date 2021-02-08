@@ -44,14 +44,12 @@ void APlayerCharacter::Tick(float DeltaTime)
 	APlayerController* Controll = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (!CheckLookAt() && !Controll->bShowMouseCursor)
 	{
-		if (bShowOutline && LastInteractable)
+		if (LastInteractable)
 		{
 			LastInteractable->Execute_OnStopLooking(LookAtActor);
+			
 		}
-		else
-		{
-			OnMessageUpdate.Broadcast(FText::FromString(""));
-		}
+		OnMessageUpdate.Broadcast(FText::FromString(""));
 		
 		LastInteractable = nullptr;
 		LookAtActor = nullptr;

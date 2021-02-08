@@ -48,16 +48,20 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	virtual	void DropItem();
 
+	void Eyepiece();
+
 public:
 
+	//Point arount which rotate the Item
 	UPROPERTY(EditDefaultsOnly, Category = "Item")
 	USceneComponent* GripPoint;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Item")
 	USceneComponent* PlayerGrip;
 
+	//How far Item is from the Player
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item")
-	FVector GripLocation = FVector(150.f, 0, 0);
+	FVector GripLength = FVector(150.f, 0, 0);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Item")
 	class UStaticMeshComponent* ItemMeshComponent;

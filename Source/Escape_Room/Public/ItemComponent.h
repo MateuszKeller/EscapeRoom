@@ -25,7 +25,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	void CheckUsedItem();
+	bool CheckUsedItem();
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")

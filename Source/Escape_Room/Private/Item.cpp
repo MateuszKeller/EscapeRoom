@@ -12,7 +12,8 @@ AItem::AItem()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	//RootComponent->SetMobility(EComponentMobility::Movable);
 
 	GripPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Grip Point"));
 	GripPoint->SetupAttachment(RootComponent);
@@ -47,6 +48,8 @@ void AItem::SetupPlayerInputComponent()
 
 		this->InputComponent->BindAxis("Turn", this, &AItem::Turn);
 		this->InputComponent->BindAxis("LookUp", this, &AItem::LookUp);
+
+		this->InputComponent->BindAction("Eyepiece", IE_Pressed, this, &AItem::Eyepiece);
 	}
 	DisableInput(GetWorld()->GetFirstPlayerController());
 }
@@ -78,8 +81,18 @@ void AItem::ToggleRotation()
 	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("Item.cpp - %s"), bIsRotating ? TEXT("true") : TEXT("false")));
 }
 
-void AItem::RotationOn() { bIsRotating = true; }
-void AItem::RotationOff() { bIsRotating = false; }
+void AItem::RotationOn() 
+{
+	/*APlayerController* Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	Controller->bShowMouseCursor = false;*/
+	bIsRotating = true;
+}
+void AItem::RotationOff() 
+{
+	/*APlayerController* Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	Controller->bShowMouseCursor = true;*/
+	bIsRotating = false; 
+}
 
 void AItem::Inspect(APlayerCharacter* Player)
 {
@@ -90,7 +103,7 @@ void AItem::Inspect(APlayerCharacter* Player)
 
 	FAttachmentTransformRules rules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, EAttachmentRule::SnapToTarget, false);
 	PlayerGrip = Player->ItemGrip;
-	PlayerGrip->SetRelativeLocation(GripLocation);
+	PlayerGrip->SetRelativeLocation(GripLength);
 	GripPoint->AttachToComponent(Player->ItemGrip, rules);
 	//AttachToComponent(Player->ItemGrip, rules);
 
@@ -101,6 +114,7 @@ void AItem::Inspect(APlayerCharacter* Player)
 	FInputModeGameAndUI InputMode = FInputModeGameAndUI();
 	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockInFullscreen);
 	Controller->SetInputMode(InputMode);
+	
 
 	Player->HoldItem = this;
 	Player->DisableInput(Controller);
@@ -112,4 +126,9 @@ void AItem::Inspect(APlayerCharacter* Player)
 void AItem::DropItem()
 {
 	PlayerGrip = nullptr;
+}
+
+void AItem::Eyepiece()
+{
+	Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->Eyepiece();
 }

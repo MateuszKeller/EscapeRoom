@@ -126,13 +126,9 @@ void AMorseStand::OnLookAt_Implementation(APlayerCharacter* Player)
 {
 	if (!bIsSolved && bHasStoppedPlaying)
 	{
-		if (Player->bShowOutline)
-		{
-			PuzzleMesh->SetRenderCustomDepth(true);
-		}
-		else
-		{
-			Player->OnMessageUpdate.Broadcast(Message);
-		}
+
+		Player->OnMessageUpdate.Broadcast(Message);
+		PuzzleMesh->SetRenderCustomDepth(true);
+
 	}
 }

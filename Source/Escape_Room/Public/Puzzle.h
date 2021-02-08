@@ -66,6 +66,8 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Interaction")
 	void OnSolve();
 
+	void Eyepiece();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCameraComponent* PuzzleCamera;
 

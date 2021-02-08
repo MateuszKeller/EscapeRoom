@@ -27,6 +27,8 @@ APuzzle::APuzzle()
 
 	Handle = CreateDefaultSubobject<USceneComponent>(TEXT("Parts Handle"));
 	Handle->SetupAttachment(PuzzleMesh);
+
+	PuzzleMesh->SetCustomDepthStencilValue(2);
 }
 
 // Called when the game starts or when spawned
@@ -58,6 +60,8 @@ void APuzzle::SetupPlayerInputComponent()
 	if (this->InputComponent)
 	{
 		this->InputComponent->BindAction("Interact", IE_Pressed, this, &APuzzle::ChangeView);
+
+		this->InputComponent->BindAction("Eyepiece", IE_Pressed, this, &APuzzle::Eyepiece);
 		/*this->InputComponent->BindAction("RightClick", IE_Pressed, this, &APuzzle::AllowRotation);
 		this->InputComponent->BindAction("RightClick", IE_Released, this, &APuzzle::AllowRotation);
 
@@ -71,14 +75,8 @@ void APuzzle::OnLookAt_Implementation(APlayerCharacter* Player)
 {
 	if (!bIsSolved)
 	{
-		if (Player->bShowOutline)
-		{
-			PuzzleMesh->SetRenderCustomDepth(true);
-		}
-		else
-		{
-			Player->OnMessageUpdate.Broadcast(Message);
-		}
+		PuzzleMesh->SetRenderCustomDepth(true);
+		Player->OnMessageUpdate.Broadcast(Message);
 	}
 }
 
@@ -86,14 +84,8 @@ void APuzzle::OnInteract_Implementation(APlayerCharacter* Player)
 {
 	if(!bIsSolved)
 	{
-		if (Player->bShowOutline)
-		{
-			OnStopLooking();
-		}
-		else
-		{
-			Player->OnMessageUpdate.Broadcast(FText::FromString(""));
-		}
+		OnStopLooking();
+		Player->OnMessageUpdate.Broadcast(FText::FromString(""));
 		ChangeView();
 	}
 }
@@ -166,6 +158,10 @@ bool APuzzle::IsSolved_Implementation()
 	return bIsSolved;
 }
 
+void APuzzle::Eyepiece()
+{
+	Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->Eyepiece();
+}
 
 //void APuzzle::TryToSolve()
 //{
