@@ -49,7 +49,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 			LastInteractable->Execute_OnStopLooking(LookAtActor);
 			
 		}
-		OnMessageUpdate.Broadcast(FText::FromString(""));
+		OnPointerTextUpdate.Broadcast(FText::FromString(""));
 		
 		LastInteractable = nullptr;
 		LookAtActor = nullptr;
@@ -159,25 +159,26 @@ AActor* APlayerCharacter::CheckLookAt()
 			IInteractable* Interface = Cast<IInteractable>(LookAtActor);
 			if (LookAtActor != HitActor)
 			{
+				//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, TEXT("LookAtActor != HitActor"));
 				LookAtActor = HitActor;
 				LastInteractable = Cast<IInteractable>(LookAtActor);
 				Interface->Execute_OnLookAt(LookAtActor, this);
 				return LookAtActor;
-				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, TEXT("LookAtActor != HitActor"));
+				
 			}
 		}
 		else
 		{
-			return nullptr;
 			//LookAtActor = nullptr;
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, TEXT("!bInteractable"));
+			//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, TEXT("!bInteractable"));
+			return nullptr;
 		}
 	}
 	else
 	{
-		return nullptr;
 		//LookAtActor = nullptr;
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, TEXT("IsNotValid(HitActor)"));
+		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, TEXT("IsNotValid(HitActor)"));
+		return nullptr;
 	}
 	return LookAtActor;
 }
@@ -186,7 +187,7 @@ void APlayerCharacter::RemoveUsedItem()
 {
 	PlayerInventory->RemoveItem(PlayerInventory->CurrentlyUsedItem);
 	PlayerInventory->CurrentlyUsedItem = FItemDetailStruct();
-	OnMessageUpdate.Broadcast(FText::FromString(""));
+	OnPointerTextUpdate.Broadcast(FText::FromString(""));
 }
 
 void APlayerCharacter::Eyepiece()

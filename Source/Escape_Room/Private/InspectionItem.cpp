@@ -28,13 +28,13 @@ void AInspectionItem::BeginPlay()
 void AInspectionItem::OnLookAt_Implementation(APlayerCharacter* Player)
 {
 	ItemMeshComponent->SetRenderCustomDepth(true);
-	Player->OnMessageUpdate.Broadcast(Message);
+	Player->OnPointerTextUpdate.Broadcast(Message);
 }
 
 void AInspectionItem::OnInteract_Implementation(APlayerCharacter* Player)
 {
 	OnStopLooking();
-	Player->OnMessageUpdate.Broadcast(FText::FromString(""));
+	Player->OnPointerTextUpdate.Broadcast(FText::FromString(""));
 
 	this->Inspect(Player);
 }
@@ -48,17 +48,6 @@ void AInspectionItem::DropItem()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Hehe I'm free!"));
 
-	
-	//DetachFromActor(rules);
-	
-	//FVector GripReset = ItemMeshComponent->GetRelativeLocation(); 
-	//FVector GripReset = ItemMeshComponent->GetComponentLocation();
-
-	//GripReset.Z *= -1;
-	//GripPoint->SetRelativeLocation(GripReset);
-	//GripPoint->SetWorldLocation(GripReset);
-	//GripPoint->SetRelativeRotation(FRotator(0.f));
-
 	FDetachmentTransformRules rules = FDetachmentTransformRules(EDetachmentRule::KeepRelative, true);
 	//FDetachmentTransformRules rules = FDetachmentTransformRules(EDetachmentRule::KeepWorld, true);
 	GripPoint->DetachFromComponent(rules);
@@ -67,7 +56,6 @@ void AInspectionItem::DropItem()
 	this->SetActorEnableCollision(true);
 	GripPoint->SetRelativeLocation(GripPointPosition);
 
-	//ItemMesh->SetSimulatePhysics(true);
 
 	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	APlayerController* Controller = GetWorld()->GetFirstPlayerController();
@@ -79,5 +67,7 @@ void AInspectionItem::DropItem()
 	Player->EnableInput(Controller);
 	Player->State = EPlayerCharacterState::None;
 	this->bIsRotating = false;
+	Player->OnPointerUpdate.Broadcast();
+	Player->OnKeysUpdate.Broadcast(FText::FromString(""));
 
 }

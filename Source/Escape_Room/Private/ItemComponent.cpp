@@ -60,7 +60,7 @@ bool UItemComponent::CheckUsedItem()
 		
 	}
 	
-	Player->OnMessageUpdate.Broadcast(FText::FromString("You Picked The Wrong House Foul"));
+	Player->OnPointerTextUpdate.Broadcast(FText::FromString("You Picked The Wrong House Foul"));
 	return false;
 }
 

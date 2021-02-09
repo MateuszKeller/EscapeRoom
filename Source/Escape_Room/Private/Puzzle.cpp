@@ -62,11 +62,6 @@ void APuzzle::SetupPlayerInputComponent()
 		this->InputComponent->BindAction("Interact", IE_Pressed, this, &APuzzle::ChangeView);
 
 		this->InputComponent->BindAction("Eyepiece", IE_Pressed, this, &APuzzle::Eyepiece);
-		/*this->InputComponent->BindAction("RightClick", IE_Pressed, this, &APuzzle::AllowRotation);
-		this->InputComponent->BindAction("RightClick", IE_Released, this, &APuzzle::AllowRotation);
-
-		this->InputComponent->BindAxis("Turn", this, &APuzzle::Turn);
-		this->InputComponent->BindAxis("LookUp", this, &APuzzle::LookUp);*/
 	}
 	DisableInput(GetWorld()->GetFirstPlayerController());
 }
@@ -76,7 +71,7 @@ void APuzzle::OnLookAt_Implementation(APlayerCharacter* Player)
 	if (!bIsSolved)
 	{
 		PuzzleMesh->SetRenderCustomDepth(true);
-		Player->OnMessageUpdate.Broadcast(Message);
+		Player->OnPointerTextUpdate.Broadcast(Message);
 	}
 }
 
@@ -85,7 +80,7 @@ void APuzzle::OnInteract_Implementation(APlayerCharacter* Player)
 	if(!bIsSolved)
 	{
 		OnStopLooking();
-		Player->OnMessageUpdate.Broadcast(FText::FromString(""));
+		Player->OnPointerTextUpdate.Broadcast(FText::FromString(""));
 		ChangeView();
 	}
 }
@@ -148,6 +143,7 @@ void APuzzle::ChangeView()
 		Player->State = EPlayerCharacterState::None;
 	}
 
+	Player->OnPointerUpdate.Broadcast();
 	Controller->SetViewTargetWithBlend(To, Time);
 	From->DisableInput(Controller);
 	To->EnableInput(Controller);

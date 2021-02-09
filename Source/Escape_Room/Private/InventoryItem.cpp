@@ -50,7 +50,7 @@ void AInventoryItem::InspectFromInventory()
 }
 void AInventoryItem::DropItem()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("InventoryItem.cpp - Go back to the Shadow!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("InventoryItem.cpp - Go back to the Shadow!"));
 	Destroy();
 	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	APlayerController* Controller = GetWorld()->GetFirstPlayerController();
@@ -58,6 +58,8 @@ void AInventoryItem::DropItem()
 	this->DisableInput(Controller);
 	Player->EnableInput(Controller);
 	Player->State = EPlayerCharacterState::None;
+	Player->OnPointerUpdate.Broadcast();
+	Player->OnKeysUpdate.Broadcast(FText::FromString(""));
 }
 
 bool AInventoryItem::IsNotWalking()

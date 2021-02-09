@@ -11,8 +11,17 @@
 #include "Others.h"
 #include "PlayerCharacter.generated.h"
 
+//Delegate to bind BP to update pointer text shown on UI
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPointerTextUpdate, FText, Message);
+
 //Delegate to bind BP to update message shown on UI
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMessageUpdate, FText, Message);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMessageUpdate, FText, Message, float, ShowTime);
+
+//Delegate to bind BP to update keys helpers shown on UI
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnKeysUpdate, FText, Message);
+
+//Delegate to bind BP to update keys helpers shown on UI
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPointerUpdate);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEyepieceUse);
 
@@ -72,11 +81,24 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RemoveUsedItem();
 
+	/// <summary>
+	/// Delegates
+	/// </summary>
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnPointerTextUpdate OnPointerTextUpdate;
+
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnMessageUpdate OnMessageUpdate;
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnKeysUpdate OnKeysUpdate;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FOnPointerUpdate OnPointerUpdate;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnEyepieceUse OnEyepieceUsed;
+
 
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* PlayerCamera;

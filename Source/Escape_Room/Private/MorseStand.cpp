@@ -127,7 +127,7 @@ void AMorseStand::OnLookAt_Implementation(APlayerCharacter* Player)
 	if (!bIsSolved && bHasStoppedPlaying)
 	{
 
-		Player->OnMessageUpdate.Broadcast(Message);
+		Player->OnPointerTextUpdate.Broadcast(Message);
 		PuzzleMesh->SetRenderCustomDepth(true);
 
 	}
