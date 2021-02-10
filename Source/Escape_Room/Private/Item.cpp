@@ -129,7 +129,7 @@ void AItem::Inspect(APlayerCharacter* Player)
 	Player->State = EPlayerCharacterState::Inspection;
 	ItemMeshComponent->SetRenderCustomDepth(false);
 	Player->OnPointerUpdate.Broadcast();
-	Player->OnKeysUpdate.Broadcast(FText::FromString("[LBM] Interaction\n[PPM] Rotation\n[E]/[ESC] Quit Inspection"));
+	Player->OnKeysUpdate.Broadcast(FText::FromString("[LBM] Interaction\n[RMB] Rotation\n[E]/[ESC] Quit Inspection"));
 }
 
 void AItem::DropItem()

@@ -54,6 +54,7 @@ void APuzzlePart::OnClickedTake(AActor* TouchedActor, FKey ButtonPressed)
 	if (!bIsSolved && PlayerController->bShowMouseCursor)
 	{
 		PlayerController->CurrentMouseCursor = EMouseCursor::Default;
+		PuzzlePartMeshComponent->SetRenderCustomDepth(false);
 	}
 }
 
