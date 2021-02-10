@@ -130,6 +130,7 @@ void APuzzle::ChangeView()
 
 		const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
 		Controller->SetMouseLocation(ViewportSize.X / 2, ViewportSize.Y / 2);
+		Player->OnKeysUpdate.Broadcast(FText::FromString("[LBM] Interaction\n[E]/[ESC] Exit Puzzle"));
 	}
 	else
 	{
@@ -141,6 +142,7 @@ void APuzzle::ChangeView()
 		Controller->SetInputMode(FInputModeGameOnly());
 		Controller->SetIgnoreLookInput(false);
 		Player->State = EPlayerCharacterState::None;
+		Player->OnKeysUpdate.Broadcast(FText::FromString(""));
 	}
 
 	Player->OnPointerUpdate.Broadcast();

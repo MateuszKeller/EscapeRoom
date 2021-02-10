@@ -14,8 +14,12 @@
 //Delegate to bind BP to update pointer text shown on UI
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPointerTextUpdate, FText, Message);
 
-//Delegate to bind BP to update message shown on UI
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnMessageUpdate, FText, Message, float, ShowTime);
+//Delegate to bind BP to show message on UI
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageUpdate, FText, Message);
+//Delegate to bind BP to show and hide message on UI
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMessageFade);
+//Delegate to bind BP to show and hide message after passed time
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMessageAnimation, FText, Message, float, ShowTime);
 
 //Delegate to bind BP to update keys helpers shown on UI
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnKeysUpdate, FText, Message);
@@ -91,7 +95,13 @@ public:
 	FOnPointerTextUpdate OnPointerTextUpdate;
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
-	FOnMessageUpdate OnMessageUpdate;
+	FMessageAnimation OnMessageAnimation;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FMessageUpdate OnMessageUpdate;
+
+	UPROPERTY(BlueprintCallable, BlueprintAssignable)
+	FMessageFade OnMessageFade;
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnKeysUpdate OnKeysUpdate;

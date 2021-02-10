@@ -59,7 +59,7 @@ bool UItemComponent::CheckUsedItem()
 		}
 	}
 	
-	Player->OnMessageUpdate.Broadcast(FText::FromString("Incorrect Item"), 1.5f);
+	Player->OnMessageAnimation.Broadcast(FText::FromString("Incorrect Item"), 1.5f);
 	return false;
 }
 
