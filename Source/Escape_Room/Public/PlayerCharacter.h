@@ -78,6 +78,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Eyepiece();
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void QuitGame();
+
 	UFUNCTION(BlueprintCallable)
 	void RemoveUsedItem();
 
@@ -128,4 +131,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bHasEyepiece = false;
+
+	UPROPERTY(BlueprintReadOnly)
+	float PlayerSpeed = 1.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float PlayerSlow = 0.1f;
 };

@@ -57,10 +57,9 @@ bool UItemComponent::CheckUsedItem()
 			Player->RemoveUsedItem();
 			return true;
 		}
-		
 	}
 	
-	Player->OnPointerTextUpdate.Broadcast(FText::FromString("You Picked The Wrong House Foul"));
+	Player->OnMessageUpdate.Broadcast(FText::FromString("Incorrect Item"), 1.5f);
 	return false;
 }
 

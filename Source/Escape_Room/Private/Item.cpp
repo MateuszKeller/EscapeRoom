@@ -43,6 +43,8 @@ void AItem::SetupPlayerInputComponent()
 	if (this->InputComponent)
 	{
 		this->InputComponent->BindAction("Interact", IE_Pressed, this, &AItem::DropItem);
+		this->InputComponent->BindAction("Quit", IE_Pressed, this, &AItem::DropItem);
+
 		this->InputComponent->BindAction("Rotate", IE_Pressed, this, &AItem::RotationOn);
 		this->InputComponent->BindAction("Rotate", IE_Released, this, &AItem::RotationOff);
 
@@ -96,6 +98,11 @@ void AItem::RotationOff()
 
 void AItem::Inspect(APlayerCharacter* Player)
 {
+	if (Player->State == EPlayerCharacterState::Inspection && IsValid(Player->HoldItem))
+	{
+		Player->HoldItem->DropItem();
+	}
+
 	bIsRotating = false;
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("Inspection?!"));
 	//ItemMeshComponent->SetSimulatePhysics(false);

@@ -13,8 +13,8 @@ UCLASS(ABSTRACT)
 class ESCAPE_ROOM_API APuzzlePart : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	APuzzlePart();
 
@@ -22,13 +22,22 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Puzzle Part")
 	void Solve();
 	virtual void Solve_Implementation();
+
+	UFUNCTION()
+	void OnClickedTake(AActor* TouchedActor, FKey ButtonPressed);
+
+	UFUNCTION()
+	void OnStartHover(AActor* TouchedActor);
+
+	UFUNCTION()
+	void OnEndHover(AActor* TouchedActor);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Puzzle Part")
 	class UCapsuleComponent* PuzzlePartInteractCollision;

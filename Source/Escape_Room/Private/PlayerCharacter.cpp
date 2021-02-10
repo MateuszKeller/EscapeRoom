@@ -71,19 +71,20 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Cursor", IE_Pressed, this, &APlayerCharacter::ShowCursor);
 
 	PlayerInputComponent->BindAction("Eyepiece", IE_Pressed, this, &APlayerCharacter::Eyepiece);
+	PlayerInputComponent->BindAction("Quit", IE_Pressed, this, &APlayerCharacter::QuitGame);
 }
 
 void APlayerCharacter::MoveForward(float Value)
 {
 
 	FVector Direction = FRotationMatrix(FRotator(0.0f, GetControlRotation().Yaw, 0.0f)).GetScaledAxis(EAxis::X);
-	AddMovementInput(Direction, Value);
+	AddMovementInput(Direction, Value * PlayerSpeed);
 }
 
 void APlayerCharacter::MoveRight(float Value)
 {
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
-	AddMovementInput(Direction, Value);
+	AddMovementInput(Direction, Value * PlayerSpeed);
 }
 
 void APlayerCharacter::Turn(float Value)
@@ -192,10 +193,16 @@ void APlayerCharacter::RemoveUsedItem()
 
 void APlayerCharacter::Eyepiece()
 {
-	bool bEnabled = EyepiceVision->bEnabled;
+	bool bVisionEnabled = EyepiceVision->bEnabled;
+	PlayerSpeed = 1.f;
 	if (bHasEyepiece)
 	{
-		EyepiceVision->bEnabled = !bEnabled;
+		if (!bVisionEnabled)
+		{
+			PlayerSpeed = PlayerSlow;
+		}
+		EyepiceVision->bEnabled = !bVisionEnabled;
 		OnEyepieceUsed.Broadcast();
 	}
+	
 }
