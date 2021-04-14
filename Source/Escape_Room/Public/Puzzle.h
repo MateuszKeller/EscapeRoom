@@ -68,6 +68,8 @@ protected:
 
 	void Eyepiece();
 
+	virtual void ShowOutline(bool Yes);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCameraComponent* PuzzleCamera;
 

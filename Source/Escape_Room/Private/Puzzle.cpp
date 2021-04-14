@@ -29,6 +29,7 @@ APuzzle::APuzzle()
 	Handle->SetupAttachment(PuzzleMesh);
 
 	PuzzleMesh->SetCustomDepthStencilValue(2);
+	
 }
 
 // Called when the game starts or when spawned
@@ -60,7 +61,7 @@ void APuzzle::SetupPlayerInputComponent()
 	if (this->InputComponent)
 	{
 		this->InputComponent->BindAction("Interact", IE_Pressed, this, &APuzzle::ChangeView);
-
+		this->InputComponent->BindAction("Quit", IE_Pressed, this, &APuzzle::ChangeView);
 		this->InputComponent->BindAction("Eyepiece", IE_Pressed, this, &APuzzle::Eyepiece);
 	}
 	DisableInput(GetWorld()->GetFirstPlayerController());
@@ -70,7 +71,7 @@ void APuzzle::OnLookAt_Implementation(APlayerCharacter* Player)
 {
 	if (!bIsSolved)
 	{
-		PuzzleMesh->SetRenderCustomDepth(true);
+		ShowOutline(true);
 		Player->OnPointerTextUpdate.Broadcast(Message);
 	}
 }
@@ -87,7 +88,7 @@ void APuzzle::OnInteract_Implementation(APlayerCharacter* Player)
 
 void APuzzle::OnStopLooking_Implementation()
 {
-	PuzzleMesh->SetRenderCustomDepth(false);
+	ShowOutline(false);
 }
 
 void APuzzle::OnStartHover(UPrimitiveComponent* TouchedComponent)
@@ -176,4 +177,7 @@ void APuzzle::Eyepiece()
 //}
 
 
-
+void APuzzle::ShowOutline(bool Yes)
+{
+	PuzzleMesh->SetRenderCustomDepth(Yes);
+}

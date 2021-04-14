@@ -28,22 +28,30 @@ protected:
 
     virtual bool IsSolved_Implementation() override;
 
+    virtual void ShowOutline(bool Yes) override;
+
 public:
 
     UFUNCTION(BlueprintImplementableEvent)
-    void ChangeMaterial(UStaticMeshComponent* Rod, FColor Color);
+    void ChangeMaterial(UStaticMeshComponent* Rod, FLinearColor Color_0, FLinearColor Color_1);
 
     UFUNCTION()
     void ChangeColor(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed);
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-    TArray<FColor> Colors;
+    TArray<FLinearColor> Colors;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    TArray<FLinearColor> Highlights;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<UStaticMeshComponent*, int32> Current;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<UStaticMeshComponent*, int32> Solution;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    UStaticMeshComponent* Base;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UStaticMeshComponent* Rod_0;

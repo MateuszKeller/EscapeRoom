@@ -76,7 +76,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::MoveForward(float Value)
 {
-
 	FVector Direction = FRotationMatrix(FRotator(0.0f, GetControlRotation().Yaw, 0.0f)).GetScaledAxis(EAxis::X);
 	AddMovementInput(Direction, Value * PlayerSpeed);
 }
@@ -160,7 +159,6 @@ AActor* APlayerCharacter::CheckLookAt()
 			IInteractable* Interface = Cast<IInteractable>(LookAtActor);
 			if (LookAtActor != HitActor)
 			{
-				//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, TEXT("LookAtActor != HitActor"));
 				LookAtActor = HitActor;
 				LastInteractable = Cast<IInteractable>(LookAtActor);
 				Interface->Execute_OnLookAt(LookAtActor, this);
@@ -194,12 +192,15 @@ void APlayerCharacter::RemoveUsedItem()
 void APlayerCharacter::Eyepiece()
 {
 	bool bVisionEnabled = EyepiceVision->bEnabled;
-	PlayerSpeed = 1.f;
 	if (bHasEyepiece)
 	{
 		if (!bVisionEnabled)
 		{
 			PlayerSpeed = PlayerSlow;
+		}
+		else
+		{
+			PlayerSpeed = 1.f;
 		}
 		EyepiceVision->bEnabled = !bVisionEnabled;
 		OnEyepieceUsed.Broadcast();

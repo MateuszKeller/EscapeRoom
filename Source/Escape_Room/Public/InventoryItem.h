@@ -27,7 +27,7 @@ struct FItemDetailStruct
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Item")
 	FTransform ItemTransform;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
 	FText Message = FText::FromString("[E] Take");
 
 	bool operator==(const FItemDetailStruct& other) const {

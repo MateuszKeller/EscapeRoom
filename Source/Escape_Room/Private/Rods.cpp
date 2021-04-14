@@ -14,6 +14,11 @@ ARods::ARods()
 	/*InteractCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Interaction Sphere"));
 	RootComponent = InteractCollision;*/
 
+	Base = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base"));
+	Base->SetupAttachment(PuzzleMesh);
+	PuzzleCamera->SetupAttachment(Base);
+	Handle->SetupAttachment(Base);
+
 	Rod_0 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Rod_0"));
 	Rod_0->SetupAttachment(Handle);
 	Rod_1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Rod_1"));
@@ -25,11 +30,22 @@ ARods::ARods()
 	Rod_4 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Rod_4"));
 	Rod_4->SetupAttachment(Handle);
 
+	Base->SetCustomDepthStencilValue(2);
+	Rod_0->SetCustomDepthStencilValue(2);
+	Rod_1->SetCustomDepthStencilValue(2);
+	Rod_2->SetCustomDepthStencilValue(2);
+	Rod_3->SetCustomDepthStencilValue(2);
+	Rod_4->SetCustomDepthStencilValue(2);
+
+
 	Colors.Empty();
+	Highlights.Empty();
 	Current.Empty();
 	Solution.Empty();
+	
 
-	Colors.Add(FColor::White);
+	Colors.Add(FColor::Black);
+	Highlights.Add(FColor::White);
 
 	Current.Add(Rod_0, 0);
 	Current.Add(Rod_1, 0);
@@ -101,14 +117,23 @@ void ARods::ChangeColor(UPrimitiveComponent* TouchedComponent, FKey ButtonPresse
 		ColorNumber %= Colors.Num();
 
 		Current.Add(Cast<UStaticMeshComponent>(TouchedComponent), ColorNumber);
-		ChangeMaterial(Cast<UStaticMeshComponent>(TouchedComponent), Colors[ColorNumber]);
+		ChangeMaterial(Cast<UStaticMeshComponent>(TouchedComponent), Colors[ColorNumber], Highlights[ColorNumber]);
 
 		if (IsSolved())
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("Rods.cpp - SOLVED")));
 			OnSolve();
 			bIsSolved = true;
 		}
 	}
 	
+}
+
+void ARods::ShowOutline(bool Yes)
+{
+	Base->SetRenderCustomDepth(Yes);
+	Rod_0->SetRenderCustomDepth(Yes);
+	Rod_1->SetRenderCustomDepth(Yes);
+	Rod_2->SetRenderCustomDepth(Yes);
+	Rod_3->SetRenderCustomDepth(Yes);
+	Rod_4->SetRenderCustomDepth(Yes);
 }

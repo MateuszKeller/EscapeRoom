@@ -13,7 +13,7 @@ AItem::AItem()
 	PrimaryActorTick.bCanEverTick = true;
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-	//RootComponent->SetMobility(EComponentMobility::Movable);
+	RootComponent->SetMobility(EComponentMobility::Movable);
 
 	GripPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Grip Point"));
 	GripPoint->SetupAttachment(RootComponent);
@@ -72,7 +72,7 @@ void AItem::LookUp(float Value)
 	if (bIsRotating)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, TEXT("LookUp"));
-		PlayerGrip->AddLocalRotation(FRotator(Value * RotationMultiplier, 0.0f, 0.0f));
+		PlayerGrip->AddLocalRotation(FRotator(-Value * RotationMultiplier, 0.0f, 0.0f));
 
 	}
 }
@@ -111,7 +111,9 @@ void AItem::Inspect(APlayerCharacter* Player)
 	FAttachmentTransformRules rules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, EAttachmentRule::SnapToTarget, false);
 	PlayerGrip = Player->ItemGrip;
 	PlayerGrip->SetRelativeLocation(GripLength);
+	PlayerGrip->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
 	GripPoint->AttachToComponent(Player->ItemGrip, rules);
+	//GripPoint->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
 	//AttachToComponent(Player->ItemGrip, rules);
 
 	//InteractCollision->SetSimulatePhysics(false);

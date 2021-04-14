@@ -27,6 +27,8 @@ protected:
 
 	virtual bool IsSolved_Implementation() override;
 
+	virtual void ShowOutline(bool Yes) override;
+
 public:
 	UFUNCTION()
 	void RotatePart(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed);

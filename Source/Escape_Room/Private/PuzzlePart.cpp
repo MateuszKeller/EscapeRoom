@@ -16,14 +16,10 @@ APuzzlePart::APuzzlePart()
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 
-	PuzzlePartInteractCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Interaction Capsule"));
-	PuzzlePartInteractCollision->InitCapsuleSize(32.f, 32.f);
-	PuzzlePartInteractCollision->SetupAttachment(RootComponent);
+	PPMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PPMeshComponent"));
+	PPMeshComponent->SetupAttachment(RootComponent);
 
-	PuzzlePartMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Item Mesh"));
-	PuzzlePartMeshComponent->SetupAttachment(RootComponent);
-
-	PuzzlePartMeshComponent->SetCustomDepthStencilValue(6);
+	PPMeshComponent->SetCustomDepthStencilValue(6);
 }
 
 // Called when the game starts or when spawned
@@ -54,7 +50,7 @@ void APuzzlePart::OnClickedTake(AActor* TouchedActor, FKey ButtonPressed)
 	if (!bIsSolved && PlayerController->bShowMouseCursor)
 	{
 		PlayerController->CurrentMouseCursor = EMouseCursor::Default;
-		PuzzlePartMeshComponent->SetRenderCustomDepth(false);
+		PPMeshComponent->SetRenderCustomDepth(false);
 	}
 }
 
@@ -64,7 +60,7 @@ void APuzzlePart::OnStartHover(AActor* TouchedActor)
 	if (!bIsSolved && PlayerController->bShowMouseCursor)
 	{
 		PlayerController->CurrentMouseCursor = EMouseCursor::Hand;
-		PuzzlePartMeshComponent->SetRenderCustomDepth(true);
+		PPMeshComponent->SetRenderCustomDepth(true);
 	}	
 }
 
@@ -74,6 +70,6 @@ void APuzzlePart::OnEndHover(AActor* TouchedActor)
 	if (!bIsSolved && PlayerController->bShowMouseCursor)
 	{
 		PlayerController->CurrentMouseCursor = EMouseCursor::Default;
-		PuzzlePartMeshComponent->SetRenderCustomDepth(false);
+		PPMeshComponent->SetRenderCustomDepth(false);
 	}
 }

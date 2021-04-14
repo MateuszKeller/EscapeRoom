@@ -39,11 +39,8 @@ public:
 	UFUNCTION()
 	void OnEndHover(AActor* TouchedActor);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Puzzle Part")
-	class UCapsuleComponent* PuzzlePartInteractCollision;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Puzzle Part")
-	class UStaticMeshComponent* PuzzlePartMeshComponent;
+	UStaticMeshComponent* PPMeshComponent;
 
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnSolve OnSolve;

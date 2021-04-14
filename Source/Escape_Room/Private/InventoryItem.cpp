@@ -47,6 +47,7 @@ void AInventoryItem::InspectFromInventory()
 {
 	bInsideInventory = true;
 	Inspect(Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)));
+	GripPoint->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
 }
 void AInventoryItem::DropItem()
 {

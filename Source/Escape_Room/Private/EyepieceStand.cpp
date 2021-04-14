@@ -16,6 +16,8 @@ AEyepieceStand::AEyepieceStand()
 	BasePart = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base Part"));
 	BasePart->SetupAttachment(Handle);
 
+	BasePart->SetCustomDepthStencilValue(2);
+
 	Part_0 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Part_0"));
 	Part_0->SetupAttachment(BasePart);
 	Part_1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Part_1"));
@@ -32,10 +34,10 @@ AEyepieceStand::AEyepieceStand()
 	Current.Add(Part_2, FRotator());
 	Current.Add(Part_3, FRotator());
 
-	Solution.Add(Part_0, FRotator(0.f, 0.f, 0.f));
-	Solution.Add(Part_1, FRotator(0.f, 270.f, 0.f));
-	Solution.Add(Part_2, FRotator(0.f, 180.f, 0.f));
-	Solution.Add(Part_3, FRotator(0.f, -270.f, 0.f));
+	Solution.Add(Part_0, FRotator(0.f, 90.f, 0.f));
+	Solution.Add(Part_1, FRotator(-90.f, 0.f, -90.f));
+	Solution.Add(Part_2, FRotator(0.f, -90.f, 180.f));
+	Solution.Add(Part_3, FRotator(90.f, 0.f, 90.f));
 }
 
 // Called when the game starts or when spawned
@@ -76,7 +78,7 @@ bool AEyepieceStand::IsSolved_Implementation()
 {
 	for (auto Elem : Solution)
 	{
-		if (!Elem.Value.Equals(Current[Elem.Key]))
+		if (!Elem.Value.Equals(Current[Elem.Key], 0.1f))
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Orange, FString::Printf(TEXT("Rods.cpp - Solution: %s P: %f, Y: %f, R: %f"), *Elem.Key->GetName(), Elem.Value.Pitch, Elem.Value.Yaw, Elem.Value.Roll));
 			//GEngine->AddOnScreenDebugMessage(-1, 30.f, FColor::Orange, FString::Printf(TEXT("Rods.cpp - Current : %s P: %f, Y: %f, R: %f"), *Elem.Key->GetName(), Current[Elem.Key].Pitch, Current[Elem.Key].Yaw, Current[Elem.Key].Roll));
@@ -93,9 +95,10 @@ void AEyepieceStand::RotatePart(UPrimitiveComponent* TouchedComponent, FKey Butt
 	if (Player->State == EPlayerCharacterState::Puzzle)
 	{
 		FRotator Rotation = Current[Cast<UStaticMeshComponent>(TouchedComponent)];
-		Current.Add(Cast<UStaticMeshComponent>(TouchedComponent), Rotation.Add(-30.f, 0.f, 0.f));
-		TouchedComponent->AddLocalRotation(FRotator(-30.f, 0.f, 0.f), true);
-
+		
+		TouchedComponent->AddLocalRotation(FRotator(-45.f, 0.f, 0.f), true);
+		Current.Add(Cast<UStaticMeshComponent>(TouchedComponent), TouchedComponent->GetRelativeRotation());
+		
 		if (IsSolved())
 		{
 			OnSolve();
@@ -104,4 +107,10 @@ void AEyepieceStand::RotatePart(UPrimitiveComponent* TouchedComponent, FKey Butt
 	}
 	
 
+}
+
+void AEyepieceStand::ShowOutline(bool Yes)
+{
+	PuzzleMesh->SetRenderCustomDepth(Yes);
+	BasePart->SetRenderCustomDepth(Yes);
 }

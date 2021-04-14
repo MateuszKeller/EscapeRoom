@@ -11,8 +11,29 @@ AMorseStand::AMorseStand()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	RootComponent = Root;
+	PuzzleMesh->SetupAttachment(Root);
+
+	Horn = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Horn"));
+	Horn->SetupAttachment(Root);
+	Horn->SetCustomDepthStencilValue(2);
+
+	Cylinder_Up = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cylinder_Up"));
+	Cylinder_Up->SetupAttachment(Horn);
+	Cylinder_Up->SetCustomDepthStencilValue(2);
+
+	Cylinder_Down = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cylinder_Down"));
+	Cylinder_Down->SetupAttachment(Horn);
+	Cylinder_Down->SetCustomDepthStencilValue(2);
+
+	Needle = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Needle"));
+	Needle->SetupAttachment(Cylinder_Down);
+	Needle->SetCustomDepthStencilValue(2);
+
 	Speaker = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Speaker"));
-	Speaker->SetupAttachment(Handle);
+	Speaker->SetupAttachment(Horn);
+	Speaker->SetCustomDepthStencilValue(2);
 
 	Button_0 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Button_0"));
 	Button_0->SetupAttachment(Handle);
@@ -28,12 +49,12 @@ AMorseStand::AMorseStand()
 	Button_5->SetupAttachment(Handle);
 
 	Letters.Empty();
-	Letters.Add(Button_0, "R");
-	Letters.Add(Button_1, "'");
-	Letters.Add(Button_2, "l");
-	Letters.Add(Button_3, "y");
-	Letters.Add(Button_4, "e");
-	Letters.Add(Button_5, "h");
+	Letters.Add(Button_0, "A");
+	Letters.Add(Button_1, "H");
+	Letters.Add(Button_2, "R");
+	Letters.Add(Button_3, "S");
+	Letters.Add(Button_4, "T");
+	Letters.Add(Button_5, "U");
 }
 
 // Called when the game starts or when spawned
@@ -75,7 +96,7 @@ void AMorseStand::Tick(float DeltaTime)
 
 bool AMorseStand::IsSolved_Implementation()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("MorseStand.cpp - Word:%s"), *Word));
+	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("MorseStand.cpp - Word:%s"), *Word));
 	if (Word == Solution)
 	{
 		return true;
@@ -92,15 +113,15 @@ void AMorseStand::SendLetter(UPrimitiveComponent* TouchedComponent, FKey ButtonP
 		if (FMath::IsNearlyEqual(TouchedComponent->GetRelativeLocation().X, 0.f, 0.01f))
 		{
 			FString l = Letters[Cast<UStaticMeshComponent>(TouchedComponent)];
-			TouchedComponent->AddRelativeLocation(FVector(5.f, 0.f, 0.f));
-			GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("MorseStand.cpp - %f %s"), TouchedComponent->GetRelativeLocation().X, *l));
+			TouchedComponent->AddRelativeLocation(FVector(2.8f, 0.f, 0.f));
+			//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("MorseStand.cpp - %f %s"), TouchedComponent->GetRelativeLocation().X, *l));
 			Word.Append(Letters[Cast<UStaticMeshComponent>(TouchedComponent)]);
 
 			if (IsSolved())
 			{
 				OnSolve();
 				bIsSolved = true;
-				GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("*.cpp - Solved")));
+				//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Orange, FString::Printf(TEXT("MorseStand.cpp.cpp - Solved")));
 			}
 			else
 			{
@@ -117,7 +138,7 @@ void AMorseStand::Reset()
 {
 	for (auto Elem : Letters)
 	{
-		Elem.Key->AddRelativeLocation(FVector(-5.f, 0.f, 0.f));
+		Elem.Key->AddRelativeLocation(FVector(-2.8f, 0.f, 0.f));
 	}
 	Word = "";
 }
@@ -128,7 +149,17 @@ void AMorseStand::OnLookAt_Implementation(APlayerCharacter* Player)
 	{
 
 		Player->OnPointerTextUpdate.Broadcast(Message);
-		PuzzleMesh->SetRenderCustomDepth(true);
+		ShowOutline(true);
 
 	}
+}
+
+void AMorseStand::ShowOutline(bool Yes)
+{
+	PuzzleMesh->SetRenderCustomDepth(Yes);
+	Horn->SetRenderCustomDepth(Yes);
+	Cylinder_Up->SetRenderCustomDepth(Yes);
+	Cylinder_Down->SetRenderCustomDepth(Yes);
+	Needle->SetRenderCustomDepth(Yes);
+	Speaker->SetRenderCustomDepth(Yes);
 }

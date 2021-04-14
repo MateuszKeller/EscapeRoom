@@ -38,6 +38,9 @@ public:
 	UStaticMesh* DummyMesh = nullptr;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	UMaterialInterface* MaterialInterface = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
 	FVector Scale;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Item")

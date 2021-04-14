@@ -27,6 +27,8 @@ protected:
 
 	virtual bool IsSolved_Implementation() override;
 
+	virtual void ShowOutline(bool Yes) override;
+
 public:
 	UFUNCTION()
 	void SendLetter(UPrimitiveComponent* TouchedComponent, FKey ButtonPressed);
@@ -46,10 +48,26 @@ public:
 	FString Word;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	FString Solution = "R'lyeh";
+	FString Solution = "HASTUR";
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	USceneComponent* Root;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UStaticMeshComponent* Speaker;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UStaticMeshComponent* Cylinder_Up;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UStaticMeshComponent* Cylinder_Down;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UStaticMeshComponent* Horn;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UStaticMeshComponent* Needle;
+
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UStaticMeshComponent* Button_0;

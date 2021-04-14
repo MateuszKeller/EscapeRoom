@@ -46,6 +46,7 @@ bool UItemComponent::CheckUsedItem()
 		{
 			ItemClass = Item.ItemClass;
 			DummyMesh = Item.ItemMesh;
+			MaterialInterface = Item.ItemMesh->GetMaterial(0);
 			Scale = Item.ItemTransform.GetScale3D();
 			ItemName = Item.ItemName;
 
@@ -58,7 +59,6 @@ bool UItemComponent::CheckUsedItem()
 			return true;
 		}
 	}
-	
 	Player->OnMessageAnimation.Broadcast(FText::FromString("Incorrect Item"), 1.5f);
 	return false;
 }
